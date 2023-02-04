@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, PasswordChangeView
+
 from .models import User
 from .forms import CustomUserCreationForm, InvitationForm, LoginForm, SetPasswordForm
 
@@ -39,8 +40,8 @@ def dashboard(request):
 def invitation(request):
     form = InvitationForm()
     return render(request, "invitation.html", {"form": form})
-
-
+    
+@login_required
 def create_user(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -72,7 +73,7 @@ class CustomLogin(LoginView):
         return render(request, "login.html", {"form": form})
 
 
-# @login_required
+@login_required
 def change_password(request):
     # user = request.user
     email = request.POST.get("email")

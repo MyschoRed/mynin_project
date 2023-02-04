@@ -48,6 +48,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'mobile']
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}, {self.email}"
+
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
@@ -56,10 +59,26 @@ class Invitation(models.Model):
     email = models.CharField(max_length=256)
     mobile = models.CharField(max_length=256)
 
+    def __str__(self):
+        return f"{self.email} {self.mobile}"
+
     class Meta:
         verbose_name = 'Invitation'
         verbose_name_plural = 'Invitations'
 
+class Teamleader(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    team_points = models.IntegerField()
+    votes = models.IntegerField()
+    businness = models.CharField(max_length=128)
+    reserve = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.user}"
+
+    class Meta:
+        verbose_name = 'Teamleader'
+        verbose_name_plural = 'Teamleaders'
 
 class Member(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -68,14 +87,17 @@ class Member(models.Model):
     primary_points = models.IntegerField()
     secondary_points = models.IntegerField()
     bonus_points = models.IntegerField()
-    teamleaders = models.CharField(max_length=128)
+    teamleaders = models.ManyToManyField(Teamleader)
 
     def initMember(self):
         if self.user is not None:
             self.primary_points = 5
+    
+    def __str__(self):
+        return f"{self.user} have teamleaders: {self.teamleaders}"
 
-class Teamleader(Member):
-    team_points = models.IntegerField()
-    votes = models.IntegerField()
-    businness = models.CharField(max_length=128)
-    reserve = models.IntegerField()
+    class Meta:
+        verbose_name = 'Member'
+        verbose_name_plural = 'Members'
+
+
