@@ -56,11 +56,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'Users'
 
 class Invitation(models.Model):
+    name = models.CharField(max_length=256)
     email = models.CharField(max_length=256)
     mobile = models.CharField(max_length=256)
 
     def __str__(self):
-        return f"{self.email} {self.mobile}"
+        return f"{self.name} {self.email} {self.mobile}"
 
     class Meta:
         verbose_name = 'Invitation'
