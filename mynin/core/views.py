@@ -1,16 +1,48 @@
 from django.core.mail import send_mail
-from django.urls import reverse_lazy
+
 from django.shortcuts import render, redirect
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView, PasswordChangeView
+from django.contrib.auth.views import LoginView
 from django.template.loader import render_to_string
 
-from .models import User, Invitation
+from .models import User, Invitation, UserProfile, ProfileStatus
 from .forms import CustomUserCreationForm, InvitationForm, CustomLoginForm, SetPasswordForm
 
+def home(requset):
+    # pocet clenov
+    members_list = []
+    tl_one_list = []
+    members = UserProfile.objects.all()
+    for m in members:
+        if m.status.status == 'Clen':
+            members_list.append(m)
+        elif m.status.status == 'Teamleader I':
+            tl_one_list.append(m)
+    m_count = len(members_list)
+    tl_one_count = len(tl_one_list)
 
+    # aktualny stav uctu
+
+
+
+
+    return render(requset, 'home.html', context={
+        'members': members,
+        'm_count': m_count,
+        'tl_one_count': tl_one_count,
+    })
+
+def my_home(requset):
+    return render(requset, 'my_home.html', context={
+
+    })
+
+
+
+# *************** WELCOME ****************#
 def welcome(request):
     if request.method == "GET":
         return render(request, "welcome.html")
@@ -27,44 +59,46 @@ def welcome(request):
             last_login = User.objects.get(email=email).last_login
 
             # ak uzivatel este nebol prihlaseny
-            if last_login == None:
+            if last_login is None:
                 # invormacia o tom ze ma kliknut na mail...
                 print("cakaj na email")
 
             # klasicky login uzivatela
-            elif last_login != None:
+            elif last_login is not None:
                 print("login")
                 return redirect("login")
         return render(request, "welcome.html")
 
 
-#*************** LOGIN ****************#
-def login(request):
-    form = CustomLoginForm()
-    if request.method == "POST":
-        form = CustomLoginForm(request.POST)
-        if form.is_valid():
+# *************** LOGIN ****************#
+class CustomLoginView(LoginView):
+    template_name = 'login.html'
+    # authentication_form = CustomLoginForm
+
+    def login(self, request, template_name):
+        form = CustomLoginForm()
+        if request.method == "POST":
+            form = CustomLoginForm(request.POST)
+            # if form.is_valid():
             email = request.POST.get('email')
             password = request.POST.get('password')
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("dashboard")
-        else:
-            print("daco zle")
-    return render(request, 'login.html', {"form": form})
+                return redirect("home")
+            # else:
+            #     print("daco zle")
+        return render(request, template_name, {"form": form})
 
 
-
-@login_required
+# @login_required(login_url="login")
 def dashboard(request):
-
     context = {
-        
+
     }
     return render(request, 'dashboard.html', context)
 
-@login_required
+
 def invitation(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -77,26 +111,27 @@ def invitation(request):
             print('emial uz bol odoslany')
             return redirect('login')
         else:
-            form.save() 
+            form.save()
             html = render_to_string('emails/send_invite.html', {'name': name, 'email': email, 'mobile': mobile})
             # activateEmail(request, form.cleaned_data.get('email'))
-            send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'neodpovedat@miso.sk', [email], html_message=html)
+            send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'neodpovedat@miso.sk', [email],
+                      html_message=html)
             return redirect('request_sended')
     else:
         form = InvitationForm()
     return render(request, "invitation.html", {"form": form})
-    
+
 
 def request_sended(request):
     return render(request, 'request_sended.html')
 
 
-@login_required
+# @login_required
 def requests_for_invitation(request):
     invitations = Invitation.objects.all()
 
     context = {
-        'invitations' : invitations,
+        'invitations': invitations,
     }
     return render(request, 'requests_for_invitation.html', context)
 
@@ -106,7 +141,7 @@ def activateEmail(request, to_email):
         received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
 
 
-@login_required
+# @login_required
 def create_user(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -118,7 +153,7 @@ def create_user(request):
     return render(request, "create_user.html", {"form": form})
 
 
-@login_required
+# @login_required
 def change_password(request):
     # user = request.user
     email = request.POST.get("email")

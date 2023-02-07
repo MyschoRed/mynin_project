@@ -31,7 +31,6 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', True)
         return self._create_user(email, password, first_name, last_name, mobile, **extra_fields)
 
-
 class User(AbstractBaseUser, PermissionsMixin):
 
     email = models.EmailField(db_index=True, unique=True, max_length=256)
@@ -81,24 +80,31 @@ class Teamleader(models.Model):
         verbose_name = 'Teamleader'
         verbose_name_plural = 'Teamleaders'
 
-class Member(models.Model):
+class ProfileStatus(models.Model):
+    status = models.CharField(max_length=32)
+
+    def __str__(self):
+        return f"{self.status}"
+
+class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     created = models.DateTimeField(default=timezone.now)
-    registrations = models.IntegerField()
-    primary_points = models.IntegerField()
-    secondary_points = models.IntegerField()
-    bonus_points = models.IntegerField()
-    teamleaders = models.ManyToManyField(Teamleader)
+    registrations = models.IntegerField(blank=True, null=True)
+    primary_points = models.IntegerField(blank=True, null=True)
+    secondary_points = models.IntegerField(blank=True, null=True)
+    bonus_points = models.IntegerField(blank=True, null=True)
+    status = models.ForeignKey(ProfileStatus, on_delete=models.CASCADE)
+    teamleaders = models.ManyToManyField(Teamleader, blank=True)
 
     def initMember(self):
         if self.user is not None:
             self.primary_points = 5
     
     def __str__(self):
-        return f"{self.user} have teamleaders: {self.teamleaders}"
+        return f"{self.user}, status: {self.status}"
 
     class Meta:
-        verbose_name = 'Member'
-        verbose_name_plural = 'Members'
+        verbose_name = 'User profile'
+        verbose_name_plural = 'User profiles'
 
 
