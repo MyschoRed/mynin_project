@@ -2,5 +2,29 @@
 
 {% block main %}
     Okno celkovy pocet clenov {{ m_count }} a TL {{ tl_one_count }}
-    Stav transparenteho uctu
+    <br>
+    Stav transparenteho uctu {{currentBalance}}
+
+
+    <h2 class="container text-center">Stav uctu</h2>
+<table class="container table">
+    <thead>
+    <tr>
+        {% for key in tableData.keys %}
+        <th class="col">{{key}}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        {% for value in tableData.values %}
+
+        {% for v in value %}
+        <td class="col">{{v}}</td>
+        {% endfor %}
+
+        {% endfor %}
+    </tr>
+    </tbody>
+</table>
 {% endblock main %}

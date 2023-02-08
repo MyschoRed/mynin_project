@@ -87,11 +87,12 @@ class ProfileStatus(models.Model):
         return f"{self.status}"
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='userprofile')
     created = models.DateTimeField(default=timezone.now)
     registrations = models.IntegerField(blank=True, null=True)
-    primary_points = models.IntegerField(blank=True, null=True)
+    primary_points = models.IntegerField(default=0, blank=True, null=True)
     secondary_points = models.IntegerField(blank=True, null=True)
+    team_points = models.IntegerField(blank=True, null=True)
     bonus_points = models.IntegerField(blank=True, null=True)
     status = models.ForeignKey(ProfileStatus, on_delete=models.CASCADE)
     teamleaders = models.ManyToManyField(Teamleader, blank=True)
