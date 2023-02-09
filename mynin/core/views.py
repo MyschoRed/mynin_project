@@ -169,7 +169,7 @@ def activateEmail(request, to_email):
 
 
 # @login_required
-def create_user(request):
+def registration(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
@@ -177,7 +177,7 @@ def create_user(request):
             return redirect("/")
     else:
         form = CustomUserCreationForm()
-    return render(request, "create_user.html", {"form": form})
+    return render(request, "registration.html", {"form": form})
 
 
 # @login_required
