@@ -2,14 +2,12 @@ from django.core.mail import send_mail
 
 from django.shortcuts import render, redirect
 
-from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
 from django.template.loader import render_to_string
 
-from .models import User, Invitation, UserProfile, ProfileStatus
-from .forms import CustomUserCreationForm, InvitationForm, CustomLoginForm, SetPasswordForm
+from .models import Invitation, UserProfile, ProfileStatus
+from .forms import InvitationForm
 from .web_scraper import balanceScraper
 
 
@@ -57,7 +55,6 @@ def my_home(request):
         sum_points = pp + sp + tp + bp
         status = user_profile.status
 
-
     return render(request, 'my_home.html', context={
         'pp': pp,
         'sp': sp,
@@ -71,7 +68,7 @@ def my_home(request):
 # *************** WELCOME ****************#
 def welcome(request):
     if request.method == "GET":
-        return render(request, "welcome.html")
+        return render(request, "welcome/welcome.html")
     else:
         email = request.POST.get("email")
 
@@ -80,45 +77,27 @@ def welcome(request):
             print("prva volba")
             return redirect("invitation")
         else:
-
             # email je uz registrovany
             last_login = User.objects.get(email=email).last_login
 
             # ak uzivatel este nebol prihlaseny
             if last_login is None:
                 # invormacia o tom ze ma kliknut na mail...
-                print("cakaj na email")
+                return redirect('email_confirm')
 
             # klasicky login uzivatela
             elif last_login is not None:
                 print("login")
                 return redirect("login")
-        return render(request, "welcome.html")
+        return render(request, "welcome/welcome.html")
+
 
 
 # *************** LOGIN ****************#
-class CustomLoginView(LoginView):
-    template_name = 'login.html'
-
-    # authentication_form = CustomLoginForm
-
-    def login(self, request, template_name):
-        form = CustomLoginForm()
-        if request.method == "POST":
-            form = CustomLoginForm(request.POST)
-            # if form.is_valid():
-            email = request.POST.get('email')
-            password = request.POST.get('password')
-            user = authenticate(request, email=email, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect("home")
-            # else:
-            #     print("daco zle")
-        return render(request, template_name, {"form": form})
 
 
-# @login_required(login_url="login")
+
+@login_required(login_url="login")
 def dashboard(request):
     context = {
 
@@ -146,14 +125,16 @@ def invitation(request):
             return redirect('request_sended')
     else:
         form = InvitationForm()
-    return render(request, "invitation.html", {"form": form})
+    return render(request, "welcome/invitation.html", {"form": form})
 
 
 def request_sended(request):
-    return render(request, 'request_sended.html')
+    return render(request, 'welcome/request_sended.html')
 
+def email_confirm(request):
+    return render(request, 'welcome/email_confirm.html')
 
-# @login_required
+@login_required
 def requests_for_invitation(request):
     invitations = Invitation.objects.all()
 
@@ -163,39 +144,34 @@ def requests_for_invitation(request):
     return render(request, 'requests_for_invitation.html', context)
 
 
-def activateEmail(request, to_email):
-    messages.success(request, f'Dear <b>Menoooo</b>, please go to you email <b>{to_email}</b> inbox and click on \
-        received activation link to confirm and complete the registration. <b>Note:</b> Check your spam folder.')
+# @login_required
+# def registration(request):
+#     if request.method == "POST":
+#         form = CustomUserCreationForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("/")
+#     else:
+#         form = CustomUserCreationForm()
+#     return render(request, "registration/registration.html", {"form": form})
 
 
 # @login_required
-def registration(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("/")
-    else:
-        form = CustomUserCreationForm()
-    return render(request, "registration.html", {"form": form})
-
-
-# @login_required
-def change_password(request):
-    # user = request.user
-    email = request.POST.get("email")
-    if request.method == "POST":
-        email = request.POST.get("email")
-        form = SetPasswordForm(email, request.POST)
-        # return render(request, 'change_password.html')
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Your password has been changed")
-            return redirect("login")
-        else:
-            for error in list(form.errors.values()):
-                messages.error(request, error)
-            print(messages)
-
-    form = SetPasswordForm(email)
-    return render(request, "change_password.html", {"form": form})
+# def change_password(request):
+#     # user = request.user
+#     email = request.POST.get("email")
+#     if request.method == "POST":
+#         email = request.POST.get("email")
+#         form = SetPasswordForm(email, request.POST)
+#         # return render(request, 'change_password.html')
+#         if form.is_valid():
+#             form.save()
+#             messages.success(request, "Your password has been changed")
+#             return redirect("login")
+#         else:
+#             for error in list(form.errors.values()):
+#                 messages.error(request, error)
+#             print(messages)
+#
+#     form = SetPasswordForm(email)
+#     return render(request, "change_password.html", {"form": form})

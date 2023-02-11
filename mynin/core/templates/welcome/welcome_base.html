@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="page-header min-vh-75">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+                    <div class="card card-plain mt-8">
+                        <div class="card-header pb-0 bg-gray-100">
+                            <img src="../../../assets/img/my-nin_logo_s.png" class="w-100" alt="mynin logo">
+                        </div>
+                        <div class="card-header bg-gray-100 pb-0 text-left">
+                            <div class="card-body">
+                                {% block welcome %}
+                                {% endblock %}
+                            </div>
+                            <div class="card-body pb-3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
