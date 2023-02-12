@@ -1,0 +1,12 @@
+{% extends 'dashboard.html' %}
+
+{% block main %}
+<div class="">
+    <p class="">Naozaj chces zmazat pozvanku?</p>
+<form method="POST">
+    {% csrf_token %}
+    <input class="" type="submit" value="Zmazat" />
+    <a class="" href="{% url 'requests_for_invitation' %}">Zrusit </a>
+</form>
+</div>
+{% endblock %}

@@ -1,37 +1,37 @@
 {% extends 'dashboard.html' %}
 
 {% block main %}
-<div class="card">
-            <!-- Card header -->
-            <div class="card-header">
-              <h5 class="mb-0">Zoznam ziadosti po registraciu</h5>
-            </div>
-            <div class="table-responsive">
-              <table class="table align-items-center table-flush" id="datatable-basic">
+    <div class="card">
+        <!-- Card header -->
+        <div class="card-header">
+            <h5 class="mb-0">Zoznam ziadosti po registraciu</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush" id="datatable-basic">
                 <thead class="thead-light">
-                  <tr>
+                <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Mobile</th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
-                  </tr>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                <tr>
                     {% for inv in invitations %}
-                    <td class="text-sm font-weight-normal">{{inv.name}}</td>
-                    <td class="text-sm font-weight-normal">{{inv.email}}</td>
-                    <td class="text-sm font-weight-normal">{{inv.mobile}}</td>
-                    <td class="text-sm content-right font-weight-normal d-flex flex-row-reverse">
-                    <a class="btn btn-sm bg-gradient-success mx-4" href="">Zaregistrovat</a>
-                    <a class="btn btn-sm bg-gradient-danger" href="">Pridelit</a>
-                    </td>
-                  </tr>
-                  {% endfor %}
+                        <td class="text-sm font-weight-normal">{{ inv.name }}</td>
+                        <td class="text-sm font-weight-normal">{{ inv.email }}</td>
+                        <td class="text-sm font-weight-normal">{{ inv.mobile }}</td>
+                        <td class="text-sm content-right font-weight-normal d-flex flex-row-reverse">
+                            <a class="btn btn-sm bg-gradient-danger" href="{% url 'request_delete' pk=inv.id %}">Zmazat</a>
+                            <a class="btn btn-sm bg-gradient-success mx-4" href="">Zaregistrovat</a>
+                        </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
-              </table>
-            </div>
-          </div>
+            </table>
+        </div>
+    </div>
 {% endblock %}
 
 

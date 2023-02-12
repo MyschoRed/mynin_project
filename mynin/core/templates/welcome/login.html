@@ -1,6 +1,12 @@
 {% extends 'welcome/welcome_base.html' %}
 
+{% block title %}Prihlasenie{% endblock %}
+
 {% block welcome %}
+    <div>
+        <h3 class="font-weight-bolder text-center text-primary text-gradient">Prihlasenie</h3>
+        <p class="mb-0 text-center">Zadaj email a heslo pre prihlasenie</p>
+    </div>
     <form role="form" method="POST" autocomplete="off" novalidate class="site-form">
         {{ form.non_field_errors }}
         {% csrf_token %}
