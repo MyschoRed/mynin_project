@@ -1,0 +1,37 @@
+{% extends 'dashboard.html' %}
+{% block title %}Nastavenia{% endblock title %}
+{% block main %}
+    <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+        <div class="card card-plain">
+            <div class="card-header bg-gray-100 pb-0 text-left">
+                <div class="card-body">
+                    <!-- Card header -->
+                    <div class="card-header bg-gray-100">
+                        <h5 class="mb-0 text-center">Nastavenia</h5>
+                    </div>
+                    <form role="form" method="POST" novalidate class="site-form">
+                        {% csrf_token %}
+                        <label class="col-form-label">Cena pozvanky (EUR):</label>
+                        {{ form.invite_price }}
+                        <label class="mt-2 col-form-label">Cislo uctu:</label>
+                        {{ form.bank_account }}
+                        <label class="mt-2 col-form-label">Splatnost:</label>
+                        {{ form.due_date }}
+                        <label class="mt-2 col-form-label">Nazov firmy:</label>
+                        {{ form.company_name }}
+                        <label class="mt-2 col-form-label">ICO:</label>
+                        {{ form.ico }}
+                        <label class="mt-2 col-form-label">DIC:</label>
+                        {{ form.dic }}
+                        <label class="mt-2 col-form-label">IC DPH:</label>
+                        {{ form.ic_dph }}
+                        <div class="text-center">
+                            <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Ulozit nastavenia
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}

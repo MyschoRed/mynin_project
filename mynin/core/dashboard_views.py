@@ -1,13 +1,24 @@
-
 from django.shortcuts import get_object_or_404, render, redirect
 
 from django.contrib.auth.decorators import login_required
 
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from .models import UserProfile, Invitation
-from .forms import CustomCreateUserForm
+from .models import UserProfile, Invitation, Settings
+from .forms import CustomCreateUserForm, SettingsForm
 from .web_scraper import balanceScraper
+
+
+# *************** SETTINGS ****************#
+def settings(request):
+    obj = get_object_or_404(Settings, id=1)
+    form = SettingsForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()
+        return redirect('settings')
+    ctx = {'form': form}
+    return render(request, 'settings.html', ctx)
+
 
 # *************** DASHBOARD ****************#
 
@@ -28,8 +39,8 @@ def home(requset):
     all_members = len(members_list) + len(tl_one_list)
     print(all_members)
     # aktualny stav uctu
-    url = 'https://ib.fio.sk/ib/transparent?a=2301819780'  # mynin
-    # url = 'https://ib.fio.sk/ib/transparent?a=2502312724'  # vela riadkovy ucet
+    # url = 'https://ib.fio.sk/ib/transparent?a=2301819780'  # mynin
+    url = 'https://ib.fio.sk/ib/transparent?a=2502312724'  # vela riadkovy ucet
     tableData = balanceScraper(url)
     currentBalance = ''
     for v in tableData.get('Bežný zostatok'):
@@ -110,8 +121,10 @@ def request_delete(request, pk):
 def new_project(request):
     return render(request, 'new_project.html')
 
+
 def projects_in(request):
     return render(request, 'projects_in.html')
+
 
 def projects_out(request):
     return render(request, 'projects_out.html')

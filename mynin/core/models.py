@@ -3,6 +3,19 @@ from django.db import models
 from django.utils import timezone
 
 
+class Settings(models.Model):
+    invite_price = models.DecimalField(decimal_places=2, max_digits=5)
+    bank_account = models.CharField(max_length=128)
+    due_date = models.IntegerField(max_length=9)
+    company_name = models.CharField(max_length=64)
+    ico = models.IntegerField(max_length=9)
+    dic = models.CharField(max_length=11)
+    ic_dph = models.CharField(max_length=14)
+
+    def __str__(self):
+        return f"Zoznam nastaveni"
+
+
 """
 Pozvanie. Posle email na administratora so ziadostou o zriadenie uctu. 
 Email obsahuje meno, email a telefonne cislo.

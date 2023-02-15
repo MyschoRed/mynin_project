@@ -1,9 +1,29 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Invitation
+from .models import Invitation, Settings
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
+
+class SettingsForm(forms.ModelForm):
+    invite_price = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Cena pozvanky'}))
+    bank_account = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Cislo uctu'}))
+    due_date = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Splatnost'}))
+    company_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Nazov firmy'}))
+    ico = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'ICO'}))
+    dic = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'DIC'}))
+    ic_dph = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'IC DPH'}))
+
+    class Meta:
+        model = Settings
+        fields = '__all__'
 
 class CustomLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):

@@ -1,0 +1,43 @@
+class Materials(generic.ListView):
+    template_name = 'app/materials.html'
+    context_object_name = 'materials'
+    form_class = MaterialIndexForm
+
+    def get(self, request):
+        materials = MaterialIndex.objects.all().order_by("index")
+        form = self.form_class(None)
+        context = {"form": form, "materials": materials}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        materials = MaterialIndex.objects.all().order_by("index")
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+            # form = self.form_class(request.POST)
+            return redirect("materials")
+        return render(request, self.template_name, {"form": form})
+
+
+def materialUpdate(request, id):
+    context = {}
+    obj = get_object_or_404(MaterialIndex, id=id)
+    form = MaterialIndexForm(request.POST or None, instance=obj)
+
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/materials")
+
+    context = {"form": form}
+    return render(request, "app/material_update.html", context)
+
+
+def materialDelete(request, id):
+    obj = get_object_or_404(MaterialIndex, id=id)
+
+    if request.method == "POST":
+        obj.delete()
+        return HttpResponseRedirect("/materials")
+
+    context = {}
+    return render(request, "app/material_delete.html", context)
