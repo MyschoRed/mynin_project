@@ -1,5 +1,5 @@
 {% extends 'welcome/welcome_base.html' %}
-
+{% block title %}Pozvanka{% endblock title %}
 {% block welcome %}
     <form role="form" class="site-form" method="post">
         {% csrf_token %}

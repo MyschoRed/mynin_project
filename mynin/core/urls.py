@@ -11,13 +11,18 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name="welcome/login.html", authentication_form=CustomLoginForm),
          name='login'),
 
-    path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/', views.home, name='home'),
     path('dashboard/home/', views.home, name='home'),
     path('dashboard/my_home/', views.my_home, name='my_home'),
     path('dashboard/create_user', views.CreateUserView.as_view(), name='create_user'),
 
+    path('dashboard/new_project', views.new_project, name='new_project'),
+    path('dashboard/projects_in', views.projects_in, name='projects_in'),
+    path('dashboard/projects_out', views.projects_out, name='projects_out'),
+
     path('registration/', views.new_registration, name='registration'),
     path('requests_for_invitation/', views.requests_for_invitation, name='requests_for_invitation'),
     path('request_delete/<pk>', views.request_delete, name='request_delete'),
+
 
 ]

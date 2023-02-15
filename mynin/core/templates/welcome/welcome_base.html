@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="page-header min-vh-75">
+    <div class="border page-header min-vh-90">
         <div class="container">
             <div class="row">
                 <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
@@ -15,8 +15,15 @@
                                 {% endblock %}
                             </div>
                             <div class="card-body pb-3">
+
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-0 col-md-6 d-flex flex-column mx-auto">
+                    <div id="globe" class="position-absolute end-5 top-0 mt-sm-3 mt-md-3 mt-7 me-lg-7">
+                        <canvas id="globe" width="700" height="600"
+                                class="w-lg-100 h-lg-100 w-100 h-100 me-lg-0 me-n10 mt-lg-5"></canvas>
                     </div>
                 </div>
             </div>

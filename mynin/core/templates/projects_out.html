@@ -1,0 +1,75 @@
+{% extends 'dashboard.html' %}
+{% block title %}OUT projekty{% endblock title %}
+{% block main %}
+    {#______________zoznam projektov_______________#}
+        <section class="py-3">
+            <div class="col-md-8 me-auto text-left">
+                <h5>OUT projekty</h5>
+            </div>
+            <div class="card">
+                <!-- Card header -->
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush" id="datatable-basic">
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nazov</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Datum
+                                zalozenia
+                            </th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Trvanie</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Celkova
+                                hodnota
+                            </th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pocet
+                                ucastnikov
+                            </th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stav</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Progres</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="text-sm font-weight-normal">XTB</td>
+                            <td class="text-sm font-weight-normal">5.6.2023</td>
+                            <td class="text-sm font-weight-normal">5.12.2023</td>
+                            <td class="text-sm font-weight-normal">5000EUR</td>
+                            <td class="text-sm font-weight-normal">50</td>
+                            <td class="text-sm font-weight-normal">Otvoreny</td>
+                            <td class="text-sm font-weight-normal">v priprave</td>
+                            <td class="text-sm content-right font-weight-normal d-flex flex-row-reverse">
+                                <a class="btn btn-sm bg-gradient-success mx-4" href="">Detial</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-sm font-weight-normal">XTB</td>
+                            <td class="text-sm font-weight-normal">5.6.2023</td>
+                            <td class="text-sm font-weight-normal">5.12.2023</td>
+                            <td class="text-sm font-weight-normal">5000EUR</td>
+                            <td class="text-sm font-weight-normal">50</td>
+                            <td class="text-sm font-weight-normal">Otvoreny</td>
+                            <td class="text-sm font-weight-normal">v priprave</td>
+                            <td class="text-sm content-right font-weight-normal d-flex flex-row-reverse">
+                                <a class="btn btn-sm bg-gradient-success mx-4" href="">Detial</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-sm font-weight-normal">XTB</td>
+                            <td class="text-sm font-weight-normal">5.6.2023</td>
+                            <td class="text-sm font-weight-normal">5.12.2023</td>
+                            <td class="text-sm font-weight-normal">5000EUR</td>
+                            <td class="text-sm font-weight-normal">50</td>
+                            <td class="text-sm font-weight-normal">Otvoreny</td>
+                            <td class="text-sm font-weight-normal">v priprave</td>
+                            <td class="text-sm content-right font-weight-normal d-flex flex-row-reverse">
+                                <a class="btn btn-sm bg-gradient-success mx-4" href="">Detial</a>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        {#______________zoznam projektov_______________#}
+{% endblock main %}

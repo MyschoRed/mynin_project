@@ -10,14 +10,9 @@ from .forms import CustomCreateUserForm
 from .web_scraper import balanceScraper
 
 # *************** DASHBOARD ****************#
+
+
 @login_required(login_url="login")
-def dashboard(request):
-    context = {
-
-    }
-    return render(request, 'dashboard.html', context)
-
-
 def home(requset):
     # pocet clenov
     members_list = []
@@ -26,11 +21,12 @@ def home(requset):
     for m in members:
         if m.status.status == 'Clen':
             members_list.append(m)
-        elif m.status.status == 'Teamleader I':
+        elif m.status.status == 'Teamleader':
             tl_one_list.append(m)
     m_count = len(members_list)
     tl_one_count = len(tl_one_list)
-
+    all_members = len(members_list) + len(tl_one_list)
+    print(all_members)
     # aktualny stav uctu
     url = 'https://ib.fio.sk/ib/transparent?a=2301819780'  # mynin
     # url = 'https://ib.fio.sk/ib/transparent?a=2502312724'  # vela riadkovy ucet
@@ -43,6 +39,7 @@ def home(requset):
         'members': members,
         'm_count': m_count,
         'tl_one_count': tl_one_count,
+        'all_members': all_members,
         'tableData': tableData,
         'currentBalance': currentBalance,
     })
@@ -62,14 +59,17 @@ def my_home(request):
         sum_points = pp + sp + tp + bp
         status = user_profile.status
 
-    return render(request, 'my_home.html', context={
-        'pp': pp,
-        'sp': sp,
-        'tp': tp,
-        'bp': bp,
-        'sum_points': sum_points,
-        'status': status,
-    })
+        return render(request, 'my_home.html', context={
+            'pp': pp,
+            'sp': sp,
+            'tp': tp,
+            'bp': bp,
+            'sum_points': sum_points,
+            'status': status,
+        })
+
+    else:
+        return render(request, 'access_denied.html')
 
 
 @login_required
@@ -103,3 +103,15 @@ def request_delete(request, pk):
         return redirect("requests_for_invitation")
 
     return render(request, "request_delete.html")
+
+
+# *************** PROJECTS ****************#
+
+def new_project(request):
+    return render(request, 'new_project.html')
+
+def projects_in(request):
+    return render(request, 'projects_in.html')
+
+def projects_out(request):
+    return render(request, 'projects_out.html')

@@ -20,7 +20,7 @@ def balanceScraper(url):
     for row in table.tbody.find_all('tr'):
         # Find all data for each column
         columns = row.find_all('td')
-        if columns != []:
+        if columns:
             stavA = columns[0].text.strip()
             stavB = columns[1].text.strip()
             sumaPrijmov = columns[2].text.strip()
