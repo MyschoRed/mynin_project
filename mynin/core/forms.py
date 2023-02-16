@@ -1,8 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Invitation, Settings
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from .models import Invitation, Settings, CustomUser
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
 
 class SettingsForm(forms.ModelForm):
@@ -24,6 +24,7 @@ class SettingsForm(forms.ModelForm):
     class Meta:
         model = Settings
         fields = '__all__'
+
 
 class CustomLoginForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -47,6 +48,14 @@ class CustomCreateUserForm(UserCreationForm):
         attrs={'class': 'form-control', 'placeholder': 'Meno'}))
     last_name = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Priezvisko'}))
+    mobile = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Telefonne cislo'}))
+    address = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Adresa'}))
+    city = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Mesto'}))
+    postal_code = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'PSC'}))
     password1 = forms.CharField(widget=forms.PasswordInput(
         attrs={
             'class': 'form-control',
@@ -57,24 +66,36 @@ class CustomCreateUserForm(UserCreationForm):
             'placeholder': 'Zopakuj heslo', }))
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = [
             'username',
             'first_name',
             'last_name',
+            'mobile',
+            'address',
+            'city',
+            'postal_code',
             'password1',
             'password2',
         ]
 
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = CustomUser
+        fields = [
+            'username',
+            'first_name',
+            'last_name',
+            'mobile',
+            'address',
+            'city',
+            'postal_code',
+        ]
 
-class InvitationForm(forms.ModelForm):
-    name = forms.CharField(required=True,
-                           widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Name'}))
+class InviteForm(forms.ModelForm):
     email = forms.EmailField(required=True,
                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
-    mobile = forms.CharField(required=True,
-                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Mobile'}))
 
     class Meta:
         model = Invitation
-        fields = ["name", "email", "mobile"]
+        fields = ["email"]

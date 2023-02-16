@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from django.utils import timezone
 
@@ -6,9 +6,9 @@ from django.utils import timezone
 class Settings(models.Model):
     invite_price = models.DecimalField(decimal_places=2, max_digits=5)
     bank_account = models.CharField(max_length=128)
-    due_date = models.IntegerField(max_length=9)
+    due_date = models.CharField(max_length=9)
     company_name = models.CharField(max_length=64)
-    ico = models.IntegerField(max_length=9)
+    ico = models.CharField(max_length=9)
     dic = models.CharField(max_length=11)
     ic_dph = models.CharField(max_length=14)
 
@@ -17,46 +17,42 @@ class Settings(models.Model):
 
 
 """
-Pozvanie. Posle email na administratora so ziadostou o zriadenie uctu. 
-Email obsahuje meno, email a telefonne cislo.
+Pozvanie. Posle email s informaciami o registracii. 
+Email obsahuje email.
 """
+
+
 class Invitation(models.Model):
-    name = models.CharField(max_length=256)
     email = models.CharField(max_length=256)
-    mobile = models.CharField(max_length=256)
 
     def __str__(self):
-        return f"{self.name} {self.email} {self.mobile}"
-
-    class Meta:
-        verbose_name = 'Invitation'
-        verbose_name_plural = 'Invitations'
-
+        return f"{self.email}"
 
 
 """
 Toto este treba domysliet...
 """
-class Teamleader(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    team_points = models.IntegerField()
-    votes = models.IntegerField()
-    businness = models.CharField(max_length=128)
-    reserve = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.user}"
-
-    class Meta:
-        verbose_name = 'Teamleader'
-        verbose_name_plural = 'Teamleaders'
-
+# class Teamleader(models.Model):
+#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+#     team_points = models.IntegerField()
+#     votes = models.IntegerField()
+#     businness = models.CharField(max_length=128)
+#     reserve = models.IntegerField()
+#
+#     def __str__(self):
+#         return f"{self.user}"
+#
+#     class Meta:
+#         verbose_name = 'Teamleader'
+#         verbose_name_plural = 'Teamleaders'
 
 
 """
 Nastavuje status na uzivatelskom profile. 
 Vyber medzi Clen/Teamleader.
 """
+
+
 class ProfileStatus(models.Model):
     status = models.CharField(max_length=32)
 
@@ -64,22 +60,46 @@ class ProfileStatus(models.Model):
         return f"{self.status}"
 
 
+class CustomUser(AbstractUser):
+    mobile = models.CharField(max_length=16)
+    address = models.CharField(max_length=64)
+    city = models.CharField(max_length=64)
+    postal_code = models.CharField(max_length=6)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 
 """
 Uzivatelsky profil. Dedi uzivatela z User. 
 Natavuje status z ProfileStatus.
 Udrziava body pre jednotliveho uzivatela.
 """
+
+
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='userprofile')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='userprofile')
     created = models.DateTimeField(default=timezone.now)
-    status = models.ForeignKey(ProfileStatus, on_delete=models.CASCADE)
+    # status = models.ForeignKey(ProfileStatus, on_delete=models.CASCADE)
+    status = models.CharField(max_length=32)
     registrations = models.IntegerField(blank=True, null=True)
     primary_points = models.IntegerField(default=0, blank=True, null=True)
     secondary_points = models.IntegerField(blank=True, null=True)
     team_points = models.IntegerField(blank=True, null=True)
     bonus_points = models.IntegerField(blank=True, null=True)
-    teamleaders = models.ManyToManyField(Teamleader, blank=True)
+    credit = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+
+    # teamleaders = models.ManyToManyField(Teamleader, blank=True)
+    def set_status(self):
+        if self.registrations < 5:
+            self.status = 'Clen'
+        elif 5 <= self.registrations < 10:
+            self.status = 'Teamleader I'
+        elif 10 <= self.registrations < 50:
+            self.status = 'Teamleader II'
+
+
+        return self.status
 
     def initMember(self):
         if self.user is not None:

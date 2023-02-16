@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Registracia{% endblock title %}
+{% block content %}
+    <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+        <div class="card card-plain">
+            <div class="card-header bg-gray-100 pb-0 text-left">
+                <div class="card-body">
+                    <!-- Card header -->
+                    <div class="card-header bg-gray-100">
+                        <h5 class="mb-0 text-center">Registracia</h5>
+                    </div>
+                    <form role="form" method="POST" autocomplete="off" novalidate class="site-form">
+                        {{ form.non_field_errors }}
+                        {% csrf_token %}
+                        <label class="col-form-label">Email</label>
+                        <div class="mb-3">
+                            {{ form.username }}
+                            {{ form.username.errors }}
+                        </div>
+                        <label class="col-form-label">Meno</label>
+                        <div class="mb-3">
+                            {{ form.first_name }}
+                        </div>
+                        <label class="col-form-label">Priezvisko</label>
+                        <div class="mb-3">
+                            {{ form.last_name }}
+                        </div>
+                        <label class="col-form-label">Telefonne cislo</label>
+                        <div class="mb-3">
+                            {{ form.mobile }}
+                        </div>
+                        <label class="col-form-label">Ulica a cislo</label>
+                        <div class="mb-3">
+                            {{ form.address }}
+                        </div>
+                        <label class="col-form-label">Mesto</label>
+                        <div class="mb-3">
+                            {{ form.city }}
+                        </div>
+                        <label class="col-form-label">PSC</label>
+                        <div class="mb-3">
+                            {{ form.postal_code }}
+                        </div>
+                        <label class="col-form-label">Heslo</label>
+                        <div class="mb-3">
+                            {{ form.password1 }}
+                            {{ form.username.errors }}
+                        </div>
+                        <label class="col-form-label">Zopakuj heslo</label>
+                        <div class="mb-3">
+                            {{ form.password2 }}
+                            {{ form.username.errors }}
+                        </div>
+
+
+                        <div class="text-center">
+                            <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Zaregistrovat
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -21,13 +21,16 @@
                             {{ user.first_name }} {{ user.last_name }}
                         </h5>
                         <p class="mb-0 font-weight-bold text-sm">
-                            Status - {{ status }}
+                            Status: <span class="font-weight-bolder">{{ status }}</span>
+                        </p>
+                        <p class="mb-0 font-weight-bold text-sm">
+                            Pocet tvojich registracii: <span class="font-weight-bolder">{{ user_profile.registrations }}</span>
                         </p>
                     </div>
                 </div>
                 <div class="col">
                     <div class="nav-wrapper mt-3 bg-gradient-faded-primary shadow-sm border border-radius-md">
-                        <h6 class="text-center text-white text-nowrap pt-2">Kredit: 50EUR</h6>
+                        <h6 class="text-center text-white text-nowrap pt-2">Kredit: {{ credit }}EUR</h6>
                     </div>
                 </div>
 

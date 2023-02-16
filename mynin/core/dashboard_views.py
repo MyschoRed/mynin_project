@@ -1,15 +1,63 @@
 from django.shortcuts import get_object_or_404, render, redirect
 
 from django.contrib.auth.decorators import login_required
-
+from django.template.loader import render_to_string
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from .models import UserProfile, Invitation, Settings
-from .forms import CustomCreateUserForm, SettingsForm
+from django.views.generic import CreateView, ListView
+from .models import UserProfile, Invitation, Settings, CustomUser
+from .forms import CustomCreateUserForm, SettingsForm, InviteForm
 from .web_scraper import balanceScraper
 
+# *************** ADMINISTRATION ****************#
+class UserListView(ListView):
+    template_name = 'user_list.html'
+    context_object_name = 'user_list'
 
-# *************** SETTINGS ****************#
+    def get_queryset(self):
+        return CustomUser.objects.all()
+
+def invite(request):
+    set_data = Settings.objects.get(pk=1)
+    invite_price = set_data.invite_price
+    if request.method == "POST":
+        email = request.POST.get("email")
+        invitations = Invitation.objects.filter(email=email)
+        form = InviteForm(request.POST)
+
+        if form.is_valid() and invitations.exists():
+            print('emial uz bol odoslany')
+            return redirect('invite_sended')
+        else:
+            if request.user.userprofile.credit >= invite_price:
+                form.save()
+                request.user.userprofile.credit = request.user.userprofile.credit - invite_price
+                request.user.userprofile.registrations += 1
+                request.user.userprofile.save()
+                html = render_to_string('emails/send_invite.html', {'email': email})
+                send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'noreply@mynin.eu', [email],
+                          html_message=html)
+                return redirect('request_sended')
+            else:
+                return redirect('low_credit')
+    else:
+        form = InviteForm()
+    return render(request, "invite.html", {"form": form, 'invite_price': invite_price})
+
+
+def invite_sended(request):
+    return render(request, 'invite_sended.html')
+
+def request_sended(request):
+    return render(request, 'request_sended.html')
+
+def low_credit(request):
+    return render(request, 'low_credit.html')
+
+
+
+
+# ________ SETTINGS ________#
 def settings(request):
     obj = get_object_or_404(Settings, id=1)
     form = SettingsForm(request.POST or None, instance=obj)
@@ -18,6 +66,8 @@ def settings(request):
         return redirect('settings')
     ctx = {'form': form}
     return render(request, 'settings.html', ctx)
+
+
 
 
 # *************** DASHBOARD ****************#
@@ -29,11 +79,11 @@ def home(requset):
     members_list = []
     tl_one_list = []
     members = UserProfile.objects.all()
-    for m in members:
-        if m.status.status == 'Clen':
-            members_list.append(m)
-        elif m.status.status == 'Teamleader':
-            tl_one_list.append(m)
+    # for m in members:
+    #     if m.status.status == 'Clen':
+    #         members_list.append(m)
+    #     elif m.status.status == 'Teamleader':
+    #         tl_one_list.append(m)
     m_count = len(members_list)
     tl_one_count = len(tl_one_list)
     all_members = len(members_list) + len(tl_one_list)
@@ -62,21 +112,23 @@ def my_home(request):
             user_profile = request.user.userprofile
         except UserProfile.DoesNotExist:
             print('profil neexistuje')
-
+        credit = user_profile.credit
         pp = user_profile.primary_points
         sp = user_profile.secondary_points
         tp = user_profile.team_points
         bp = user_profile.bonus_points
         sum_points = pp + sp + tp + bp
-        status = user_profile.status
+        status = user_profile.set_status()
 
         return render(request, 'my_home.html', context={
+            'user_profile': user_profile,
             'pp': pp,
             'sp': sp,
             'tp': tp,
             'bp': bp,
             'sum_points': sum_points,
             'status': status,
+            'credit': credit,
         })
 
     else:
@@ -97,13 +149,6 @@ class CreateUserView(CreateView):
     form_class = CustomCreateUserForm
     success_url = reverse_lazy('requests_for_invitation')
     template_name = 'create_user.html'
-
-
-def new_registration(request, pk):
-    obj = get_object_or_404(Invitation, id=pk)
-
-    context = {"form": form}
-    return render(request, "registration", context)
 
 
 def request_delete(request, pk):

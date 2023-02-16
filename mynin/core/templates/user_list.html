@@ -1,0 +1,32 @@
+{% extends 'dashboard.html' %}
+{% block title %}Zoznam clenov{% endblock title %}
+{% block main %}
+    <section class="py-3 container">
+        <div class="card">
+        <div class="card-header">
+            <h5  class="mb-0">Zoznam clenov</h5>
+        </div>
+            <!-- Card header -->
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush" id="datatable-basic">
+                    <thead class="thead-light">
+                    <tr>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Meno</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for u in user_list %}
+                    <tr>
+                        <td class="text-sm font-weight-normal">{{ u.first_name }} {{ u.last_name }}</td>
+                        <td class="text-sm font-weight-normal">{{ u.username }}</td>
+                        <td class="text-sm font-weight-normal">{{ u.status }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+{% endblock main %}
