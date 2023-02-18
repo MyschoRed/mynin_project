@@ -13,14 +13,13 @@ with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
 DEBUG = True
 
 # ALLOWED_HOSTS = ['mynin.spiso.eu', 'www.mynin.spiso.eu']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # EMAIL
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
 EMAIL_HOST_USER = 'd6dbac30916090'
 EMAIL_HOST_PASSWORD = '023affb0e6f3cb'
 EMAIL_PORT = '2525'
-
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',

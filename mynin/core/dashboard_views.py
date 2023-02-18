@@ -76,30 +76,17 @@ def settings(request):
 @login_required(login_url="login")
 def home(requset):
     # pocet clenov
-    members_list = []
-    tl_one_list = []
-    members = UserProfile.objects.all()
-    # for m in members:
-    #     if m.status.status == 'Clen':
-    #         members_list.append(m)
-    #     elif m.status.status == 'Teamleader':
-    #         tl_one_list.append(m)
-    m_count = len(members_list)
-    tl_one_count = len(tl_one_list)
-    all_members = len(members_list) + len(tl_one_list)
-    print(all_members)
+    all_members = len(UserProfile.objects.all())
+
     # aktualny stav uctu
-    # url = 'https://ib.fio.sk/ib/transparent?a=2301819780'  # mynin
-    url = 'https://ib.fio.sk/ib/transparent?a=2502312724'  # vela riadkovy ucet
+    url = 'https://ib.fio.sk/ib/transparent?a=2301819780'  # mynin
+    # url = 'https://ib.fio.sk/ib/transparent?a=2502312724'  # vela riadkovy ucet
     tableData = balanceScraper(url)
     currentBalance = ''
     for v in tableData.get('Bežný zostatok'):
         currentBalance = v
 
     return render(requset, 'home.html', context={
-        'members': members,
-        'm_count': m_count,
-        'tl_one_count': tl_one_count,
         'all_members': all_members,
         'tableData': tableData,
         'currentBalance': currentBalance,
