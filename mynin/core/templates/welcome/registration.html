@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Registracia{% endblock title %}
 {% block content %}
-    <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
+    <div class="col-xl-4 col-lg-8 col-md-8 d-flex flex-column mx-auto">
         <div class="card card-plain">
             <div class="card-header bg-gray-100 pb-0 text-left">
                 <div class="card-body">
                     <!-- Card header -->
                     <div class="card-header bg-gray-100">
-                        <h5 class="mb-0 text-center">Registracia</h5>
+                        <h4 class="text-primary text-center">Registracia</h4>
+                        <p class="text-center">Zadaj udeje pre regisdtraciu</p>
                     </div>
                     <form role="form" method="POST" autocomplete="off" novalidate class="site-form">
                         {{ form.non_field_errors }}
