@@ -5,9 +5,10 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
-from .models import UserProfile, Invitation, Settings, CustomUser
-from .forms import CustomCreateUserForm, SettingsForm, InviteForm
+from .models import UserProfile, Invitation, Settings, CustomUser, Credit
+from .forms import CustomCreateUserForm, SettingsForm, InviteForm, RechargeCreditForm
 from .web_scraper import balanceScraper
+
 
 # *************** ADMINISTRATION ****************#
 class UserListView(ListView):
@@ -16,6 +17,7 @@ class UserListView(ListView):
 
     def get_queryset(self):
         return CustomUser.objects.all()
+
 
 def invite(request):
     set_data = Settings.objects.get(pk=1)
@@ -48,13 +50,29 @@ def invite(request):
 def invite_sended(request):
     return render(request, 'invite_sended.html')
 
+
 def request_sended(request):
     return render(request, 'request_sended.html')
+
 
 def low_credit(request):
     return render(request, 'low_credit.html')
 
 
+def recharge_credit(request):
+    credit = Credit()
+    form = RechargeCreditForm()
+    if request.method == 'POST':
+        form = RechargeCreditForm(request.POST)
+        credit.recharge(request.POST)
+        credit.save()
+        print(credit)
+        return redirect('recharge_confirm')
+
+    ctx = {
+        'form': form,
+    }
+    return render(request, 'recharge_credit.html', ctx)
 
 
 # ________ SETTINGS ________#
@@ -66,8 +84,6 @@ def settings(request):
         return redirect('settings')
     ctx = {'form': form}
     return render(request, 'settings.html', ctx)
-
-
 
 
 # *************** DASHBOARD ****************#

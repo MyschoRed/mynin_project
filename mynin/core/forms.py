@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Invitation, Settings, CustomUser
+from .models import Invitation, Settings, CustomUser, Credit
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
 
@@ -79,6 +79,7 @@ class CustomCreateUserForm(UserCreationForm):
             'password2',
         ]
 
+
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
@@ -92,6 +93,7 @@ class CustomUserChangeForm(UserChangeForm):
             'postal_code',
         ]
 
+
 class InviteForm(forms.ModelForm):
     email = forms.EmailField(required=True,
                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
@@ -99,3 +101,12 @@ class InviteForm(forms.ModelForm):
     class Meta:
         model = Invitation
         fields = ["email"]
+
+
+class RechargeCreditForm(forms.ModelForm):
+    credit = forms.CharField(required=True,
+                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Kredit'}))
+
+    class Meta:
+        model = Credit
+        fields = ['credit']

@@ -22,6 +22,7 @@ urlpatterns = [
     path('dashboard/invite_sended/', views.invite_sended, name='invite_sended'),
     path('dashboard/request_sended/', views.request_sended, name='request_sended'),
     path('dashboard/low_credit/', views.low_credit, name='low_credit'),
+    path('dashboard/recharge_credit/', views.recharge_credit, name='recharge_credit'),
     path('dashboard/user_list/', views.UserListView.as_view(), name='user_list'),
     path('dashboard/settings/', views.settings, name='settings'),
 

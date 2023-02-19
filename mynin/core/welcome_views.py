@@ -30,6 +30,7 @@ def welcome(request):
     #             return redirect("login")
     return render(request, "welcome/login.html")
 
+
 def new_registration(request):
     form = CustomCreateUserForm
     if request.method == 'POST':
@@ -42,7 +43,5 @@ def new_registration(request):
     return render(request, 'welcome/registration.html', context)
 
 
-
 def email_confirm(request):
     return render(request, 'welcome/email_confirm.html')
-

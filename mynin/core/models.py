@@ -20,8 +20,6 @@ class Settings(models.Model):
 Pozvanie. Posle email s informaciami o registracii. 
 Email obsahuje email.
 """
-
-
 class Invitation(models.Model):
     email = models.CharField(max_length=256)
 
@@ -98,7 +96,6 @@ class UserProfile(models.Model):
         elif 10 <= self.registrations < 50:
             self.status = 'Teamleader II'
 
-
         return self.status
 
     def initMember(self):
@@ -111,3 +108,14 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name = 'User profile'
         verbose_name_plural = 'User profiles'
+
+
+class Credit(models.Model):
+    credit = models.DecimalField(decimal_places=2, max_digits=10)
+
+    def recharge(self, count):
+        credit = float(self.credit) + float(count)
+        return credit
+
+    def __str__(self):
+        return f"Kredit: {self.credit} EUR"

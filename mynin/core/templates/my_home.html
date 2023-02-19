@@ -24,7 +24,8 @@
                             Status: <span class="font-weight-bolder">{{ status }}</span>
                         </p>
                         <p class="mb-0 font-weight-bold text-sm">
-                            Pocet tvojich registracii: <span class="font-weight-bolder">{{ user_profile.registrations }}</span>
+                            Pocet tvojich registracii: <span
+                                class="font-weight-bolder">{{ user_profile.registrations }}</span>
                         </p>
                     </div>
                 </div>
@@ -36,7 +37,7 @@
 
                 <div class="col">
                     <div class="nav-wrapper mt-3">
-                        <a href="" class="btn btn-primary">Dobit kredit</a>
+                        <a href="{% url 'recharge_credit' %}" class="btn btn-primary">Dobit kredit</a>
                     </div>
                 </div>
             </div>

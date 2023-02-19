@@ -1,5 +1,31 @@
 {% extends 'dashboard.html' %}
 {% block title %}Dobit kredit{% endblock title %}
 {% block main %}
-dobitie kreditu
+<div class="col-xl-4 col-lg-8 col-md-8 d-flex flex-column mx-auto">
+        <div class="card card-plain">
+            <div class="card-header bg-gray-100 pb-0 text-left">
+                <div class="card-body">
+                    <!-- Card header -->
+                    <div class="card-header bg-gray-100">
+                        <h4 class="text-primary text-center">Dobitie kreditu</h4>
+                        <p class="text-center">bla bla bla</p>
+                    </div>
+                    <form role="form" method="POST" autocomplete="off" novalidate class="site-form">
+                        {% csrf_token %}
+                        <label class="col-form-label">Suma</label>
+                        <div class="mb-3">
+                            {{ form.credit }}
+                        </div>
+
+                        {{ form.non_field_errors }}
+                        <div class="text-center">
+                            <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Odoslat
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock main %}
