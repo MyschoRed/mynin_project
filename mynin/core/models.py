@@ -82,9 +82,9 @@ class UserProfile(models.Model):
     status = models.CharField(max_length=32)
     registrations = models.IntegerField(blank=True, null=True)
     primary_points = models.IntegerField(default=0, blank=True, null=True)
-    secondary_points = models.IntegerField(blank=True, null=True)
-    team_points = models.IntegerField(blank=True, null=True)
-    bonus_points = models.IntegerField(blank=True, null=True)
+    secondary_points = models.IntegerField(default=0, blank=True, null=True)
+    team_points = models.IntegerField(default=0, blank=True, null=True)
+    bonus_points = models.IntegerField(default=0,blank=True, null=True)
     credit = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
     # teamleaders = models.ManyToManyField(Teamleader, blank=True)
@@ -110,12 +110,12 @@ class UserProfile(models.Model):
         verbose_name_plural = 'User profiles'
 
 
-class Credit(models.Model):
-    credit = models.DecimalField(decimal_places=2, max_digits=10)
-
-    def recharge(self, count):
-        credit = float(self.credit) + float(count)
-        return credit
-
-    def __str__(self):
-        return f"Kredit: {self.credit} EUR"
+# class Credit(models.Model):
+#     credit = models.DecimalField(decimal_places=2, max_digits=10)
+#
+#     def recharge(self, count):
+#         credit = float(self.credit) + float(count)
+#         return credit
+#
+#     def __str__(self):
+#         return f"Kredit: {self.credit} EUR"

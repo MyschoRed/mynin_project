@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import Invitation, Settings, CustomUser, Credit
+from .models import Invitation, Settings, CustomUser
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
 
 
@@ -103,10 +103,10 @@ class InviteForm(forms.ModelForm):
         fields = ["email"]
 
 
-class RechargeCreditForm(forms.ModelForm):
-    credit = forms.CharField(required=True,
-                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Kredit'}))
-
-    class Meta:
-        model = Credit
-        fields = ['credit']
+# class RechargeCreditForm(forms.ModelForm):
+#     credit = forms.CharField(required=True,
+#                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Kredit'}))
+#
+#     class Meta:
+#         model = Credit
+#         fields = ['credit']
