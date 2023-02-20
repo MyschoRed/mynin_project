@@ -103,10 +103,14 @@ class InviteForm(forms.ModelForm):
         fields = ["email"]
 
 
-# class RechargeCreditForm(forms.ModelForm):
-#     credit = forms.CharField(required=True,
-#                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Kredit'}))
-#
-#     class Meta:
-#         model = Credit
-#         fields = ['credit']
+class RechargeCreditForm(forms.ModelForm):
+    choices = ((10, '10 EUR'),
+               (20, '20 EUR'),
+               (50, '50 EUR'),
+               (100, '100 EUR'),)
+    credit = forms.ChoiceField(choices=choices, required=True,
+                               widget=forms.Select(attrs={'class': 'form-control', 'placeholder': 'Kredit'}))
+
+    class Meta:
+        model = CustomUser
+        fields = ['credit']

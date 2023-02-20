@@ -18,6 +18,12 @@ class CustomUserAdmin(UserAdmin):
         'city',
         'postal_code']
 
+    def address(self, obj):
+        return obj.profile.address
+
+    address.admin_order_field = 'profile__address'
+    address.short_description = 'Address'
+
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(ProfileStatus)

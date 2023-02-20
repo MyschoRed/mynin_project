@@ -214,65 +214,10 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        <!-- Button trigger modal -->
-                        <button type="button" class="col-12 btn btn-block btn-info mb-3" data-bs-toggle="modal"
-                                data-bs-target="#modal-form">Dobit kredit
-                        </button>
-                        <!-- Modal -->
-                        <div class="modal fade" id="modal-form" tabindex="-1" role="dialog"
-                             aria-labelledby="modal-form" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body p-0">
-                                        <div class="card card-plain">
-                                            <div class="card-header pb-0 text-left">
-                                                <h3 class="font-weight-bolder text-info text-gradient">Dobit kredit</h3>
-                                                <p class="mb-0">Zadaj sumu na dobitie kreditu</p>
-                                            </div>
-                                            <div class="card-body">
-                                                <form role="form">
-                                                    <label for="select_price">EUR</label>
-                                                    <div class="input-group mb-3">
-                                                        <select class="form-control" id="select_price"
-                                                                name="Suma">
-                                                            <option value="10">10 EUR</option>
-                                                            <option value="20">20 EUR</option>
-                                                            <option value="50">50 EUR</option>
-                                                            <option value="100">100 EUR</option>
-                                                            <option value="other">ine</option>
-                                                        </select>
-                                                    </div>
-                                                    <div id="other_input" style="display: none;">
-                                                        <label for="custom_price">Zadaj sumu</label>
-                                                        <input type="text" class="form-control" name="custom_price"
-                                                               id="custom_price">
-                                                    </div>
-                                                    <div class="text-center">
-                                                        <button type="button"
-                                                                class="btn btn-round bg-gradient-info btn-lg w-100 mt-4 mb-0">
-                                                            Odoslat
-                                                        </button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                            <script>
-                                                const select = document.getElementById("select_price");
-                                                const input = document.getElementById("other_input");
-
-                                                select.addEventListener("change", function () {
-                                                    if (select.value === "other") {
-                                                        input.style.display = "block";
-                                                    } else {
-                                                        input.style.display = "none";
-                                                    }
-                                                });
-                                            </script>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div>
+                            <a href="{% url 'recharge_credit' %}" class="btn btn-round bg-gradient-info btn-lg w-100 mt-4 mb-0">
+                                Dobit kredit
+                            </a>
                         </div>
                     </div>
                 </div>

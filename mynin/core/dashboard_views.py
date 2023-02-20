@@ -1,3 +1,6 @@
+import datetime
+
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 
 from django.contrib.auth.decorators import login_required
@@ -6,7 +9,7 @@ from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 from .models import UserProfile, Invitation, Settings, CustomUser
-from .forms import CustomCreateUserForm, SettingsForm, InviteForm
+from .forms import CustomCreateUserForm, SettingsForm, InviteForm, RechargeCreditForm
 from .web_scraper import balanceScraper
 
 
@@ -21,17 +24,23 @@ class UserListView(ListView):
 
 def recharge_credit(request):
     if request.method == 'POST':
+        email = request.user.username
         credit = request.POST.get('credit')
-        credit.recharge(request.POST)
-        credit.save()
-        print(credit)
-        return redirect('recharge_confirm')
+        if credit == 'other':
+            choice = request.POST.get('other')
+        else:
+            choice = request.POST.get('credit')
+        # request.user.userprofile.credit = float(request.user.userprofile.credit) + float(choice)
+        # request.user.userprofile.save()
+        html = render_to_string('emails/send_payment_info.html', {'email': email})
+        send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'noreply@mynin.eu', [email],
+                  html_message=html)
+        return render(request, 'recharge_confirm.html')
 
     ctx = {
-        'form': form,
+
     }
     return render(request, 'recharge_credit.html', ctx)
-
 
 
 def invite(request):
@@ -74,6 +83,17 @@ def low_credit(request):
     return render(request, 'low_credit.html')
 
 
+def recharge_confirm(request):
+    settings_data = get_object_or_404(Settings, id=1)
+    today = datetime.date.today()
+    d = int(settings_data.due_date)
+    due_date = today + datetime.timedelta(days=d)
+    due_date.strftime('%d-%m-%Y')
+    ctx = {
+        'settings': settings_data,
+        'due_date': due_date
+    }
+    return render(request, 'recharge_confirm.html', ctx)
 
 
 # ________ SETTINGS ________#

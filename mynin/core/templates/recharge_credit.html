@@ -1,30 +1,48 @@
 {% extends 'dashboard.html' %}
 {% block title %}Dobit kredit{% endblock title %}
 {% block main %}
-<div class="col-xl-4 col-lg-8 col-md-8 d-flex flex-column mx-auto">
+    <div class="col-xl-4 col-lg-8 col-md-8 d-flex flex-column mx-auto">
         <div class="card card-plain">
             <div class="card-header bg-gray-100 pb-0 text-left">
                 <div class="card-body">
-                    <!-- Card header -->
-                    <div class="card-header bg-gray-100">
-                        <h4 class="text-primary text-center">Dobitie kreditu</h4>
-                        <p class="text-center">bla bla bla</p>
-                    </div>
-                    <form role="form" method="POST" autocomplete="off" novalidate class="site-form">
+                    <form role="form" method="POST">
                         {% csrf_token %}
-                        <label class="col-form-label">Suma</label>
-                        <div class="mb-3">
-                            {{ form.credit }}
+                        <label for="select_price">EUR</label>
+                        <div class="input-group mb-3">
+                            <select class="form-control" id="select_price" style="display: block;"
+                                    name="credit">
+                                <option name="credit" value="10">10 EUR</option>
+                                <option value="20">20 EUR</option>
+                                <option value="50">50 EUR</option>
+                                <option value="100">100 EUR</option>
+                                <option value="other">ine</option>
+                            </select>
                         </div>
-
-                        {{ form.non_field_errors }}
+                        <div id="custom_price" style="display: none;">
+                            <label for="custom_price">Zadaj sumu</label>
+                            <input type="text" class="form-control" name="other"
+                                   id="other">
+                        </div>
                         <div class="text-center">
-                            <button type="submit" class="btn bg-gradient-primary w-100 mt-4 mb-0">Odoslat
-                            </button>
+                            <input type="submit" value="Odoslat"
+                                    class="btn btn-round bg-gradient-info btn-lg w-100 mt-4 mb-0">
                         </div>
                     </form>
-
                 </div>
+                <script>
+                    const select = document.querySelector('#select_price');
+                    const input = document.querySelector('#custom_price');
+
+                    select.addEventListener("change", function () {
+                        if (select.value === "other") {
+                            input.style.display = "block";
+                            select.style.display = "none";
+                        } else {
+                            input.style.display = "none";
+                            select.style.display = "block";
+                        }
+                    });
+                </script>
             </div>
         </div>
     </div>
