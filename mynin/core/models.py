@@ -84,10 +84,11 @@ class UserProfile(models.Model):
     primary_points = models.IntegerField(default=0, blank=True, null=True)
     secondary_points = models.IntegerField(default=0, blank=True, null=True)
     team_points = models.IntegerField(default=0, blank=True, null=True)
-    bonus_points = models.IntegerField(default=0,blank=True, null=True)
+    bonus_points = models.IntegerField(default=0, blank=True, null=True)
     credit = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    credit_for_recharge = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    variable_symbol = models.IntegerField(default=0)
 
-    # teamleaders = models.ManyToManyField(Teamleader, blank=True)
     def set_status(self):
         if self.registrations < 5:
             self.status = 'Clen'
@@ -103,7 +104,7 @@ class UserProfile(models.Model):
             self.primary_points = 5
 
     def __str__(self):
-        return f"{self.user}, status: {self.status}"
+        return f"{self.pk}, {self.user}, status: {self.status}"
 
     class Meta:
         verbose_name = 'User profile'
@@ -119,3 +120,11 @@ class UserProfile(models.Model):
 #
 #     def __str__(self):
 #         return f"Kredit: {self.credit} EUR"
+
+class Invoice(models.Model):
+    user_info = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    payment_info = models.ForeignKey(Settings, on_delete=models.CASCADE)
+    value = models.CharField(max_length=12)
+    due_date = models.DateField()
+
+

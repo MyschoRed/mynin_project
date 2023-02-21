@@ -29,5 +29,7 @@ urlpatterns = [
 
     path('requests_for_invitation/', views.requests_for_invitation, name='requests_for_invitation'),
     path('request_delete/<pk>', views.request_delete, name='request_delete'),
+    path('dashboard/credit_administration/', views.credit_administration, name='credit_administration'),
+    path('dashboard/add_credit/<pk>', views.add_credit, name='add_credit'),
 
 ]

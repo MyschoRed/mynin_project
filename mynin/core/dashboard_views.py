@@ -3,12 +3,12 @@ import datetime
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render, redirect
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.template.loader import render_to_string
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
-from .models import UserProfile, Invitation, Settings, CustomUser
+from .models import UserProfile, Invitation, Settings, CustomUser, Invoice
 from .forms import CustomCreateUserForm, SettingsForm, InviteForm, RechargeCreditForm
 from .web_scraper import balanceScraper
 
@@ -21,26 +21,6 @@ class UserListView(ListView):
     def get_queryset(self):
         return CustomUser.objects.all()
 
-
-def recharge_credit(request):
-    if request.method == 'POST':
-        email = request.user.username
-        credit = request.POST.get('credit')
-        if credit == 'other':
-            choice = request.POST.get('other')
-        else:
-            choice = request.POST.get('credit')
-        # request.user.userprofile.credit = float(request.user.userprofile.credit) + float(choice)
-        # request.user.userprofile.save()
-        html = render_to_string('emails/send_payment_info.html', {'email': email})
-        send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'noreply@mynin.eu', [email],
-                  html_message=html)
-        return render(request, 'recharge_confirm.html')
-
-    ctx = {
-
-    }
-    return render(request, 'recharge_credit.html', ctx)
 
 
 def invite(request):
@@ -83,17 +63,79 @@ def low_credit(request):
     return render(request, 'low_credit.html')
 
 
+def recharge_credit(request):
+    if request.method == 'POST':
+        email = request.user.username
+        credit = request.POST.get('credit')
+        if credit == 'other':
+            choice = request.POST.get('other')
+        else:
+            choice = request.POST.get('credit')
+        request.user.userprofile.credit_for_recharge = float(choice)
+        request.user.userprofile.save()
+        html = render_to_string('emails/send_payment_info.html', {'email': email})
+        send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'noreply@mynin.eu', [email],
+                  html_message=html)
+        return redirect('recharge_confirm')
+
+    return render(request, 'recharge_credit.html')
+
+
 def recharge_confirm(request):
+    user_info = get_object_or_404(UserProfile, id=request.user.pk)
+    invoice = Invoice()
     settings_data = get_object_or_404(Settings, id=1)
-    today = datetime.date.today()
+
     d = int(settings_data.due_date)
-    due_date = today + datetime.timedelta(days=d)
+    due_date = datetime.date.today() + datetime.timedelta(days=d)
     due_date.strftime('%d-%m-%Y')
+
+    invoice.user_info = request.user.userprofile
+    invoice.payment_info = settings_data
+    invoice.value = request.user.userprofile.credit_for_recharge
+    invoice.due_date = due_date
+    invoice.save()
+
     ctx = {
+        'user_info': user_info,
         'settings': settings_data,
         'due_date': due_date
     }
     return render(request, 'recharge_confirm.html', ctx)
+
+@user_passes_test(lambda user: user.is_superuser)
+def requests_for_invitation(request):
+    invitations = Invitation.objects.all()
+
+    context = {
+        'invitations': invitations,
+    }
+    return render(request, 'requests_for_invitation.html', context)
+
+@user_passes_test(lambda user: user.is_superuser)
+def credit_administration(request):
+    invoices = Invoice.objects.all()
+
+    ctx = {
+        'invoices': invoices,
+    }
+
+    return render(request, 'credit_administration.html', ctx)
+
+@user_passes_test(lambda user: user.is_superuser)
+def add_credit(request, pk):
+    obj = get_object_or_404(Invoice, id=pk)
+
+    if request.method == 'POST':
+        obj.user_info.credit = float(obj.user_info.credit) + float(obj.user_info.credit_for_recharge)
+        obj.user_info.credit_for_recharge = 0
+        obj.user_info.save()
+        obj.delete()
+        print('obj vymazany')
+        return redirect('credit_administration')
+
+    return render(request, 'add_credit.html')
+
 
 
 # ________ SETTINGS ________#
@@ -157,16 +199,6 @@ def my_home(request):
 
     else:
         return render(request, 'access_denied.html')
-
-
-@login_required
-def requests_for_invitation(request):
-    invitations = Invitation.objects.all()
-
-    context = {
-        'invitations': invitations,
-    }
-    return render(request, 'requests_for_invitation.html', context)
 
 
 class CreateUserView(CreateView):

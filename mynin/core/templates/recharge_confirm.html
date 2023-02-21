@@ -1,43 +1,69 @@
 {% extends 'dashboard.html' %}
 {% block title %}Potvrdnie{% endblock title %}
 {% block main %}
-    <div class="col-12 col-md-6 col-xl-4 mt-md-0 mt-4">
+    <div class="mt-5 row justify-content-center">
+        <div class="col-12 col-md-6 col-xl-4 mt-md-0 mt-4">
+
+            <div class="card h-20">
+                <div class="card-header bg-info pb-0 p-3">
+                    <div class="row">
+                        <div class=" d-flex align-items-center">
+                            <p class="text-dark">Ziadosť na dobitie kreditu poslana na schválenie. Po nabehnuti uhrady
+                                uvedenej faktury
+                                bude kredit pripisany na Váš účet.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="col my-4">
+                    </div>
+                </div>
                 <div class="card h-100">
                     <div class="card-header pb-0 p-3">
                         <div class="row">
-                            <div class="col-md-8 d-flex align-items-center">
-                                <h6 class="mb-0">Faktura</h6>
+                            <div class="d-flex align-items-center">
+                                <h4 class="mb-0">Platobne udaje</h4>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
+
                         <div class="col my-4">
                             <ul>
-                                <li>Meno zakaznika: {{ user.first_name }} {{ user.last_name }}</li>
-                                <li>Adresa: {{ user.address }}, {{ user.city }} {{ user.postal_code }}</li>
-                                <li>Telefonne cislo: {{ user.mobile }}</li>
-                                <li>Email: {{ user.username }}</li>
-                                <li>Cislo uctu(IBAN): {{ settings.bank_account }}</li>
-                                <li>Variabilny symbol: {{ user.variable_symbol }},</li>
-                                <li>Suma na uhradu: {{ user.new_credit }},</li> {# toto asi je zle #}
-                                <li>Datum splatnosti: {{ due_date }},</li> {# treba dopocitat #}
+                                <li>
+                                    Meno zakaznika: {{ user.first_name }} {{ user.last_name }}</li>
+                                <li>
+                                    Adresa: {{ user_info.user.address }}, {{ user_info.user.city }} {{ user_info.user.postal_code }}
+                                </li>
+                                <li>
+                                    Telefonne cislo: {{ user.mobile }}
+                                </li>
+                                <li>
+                                    Email: {{ user.username }}
+                                </li>
+                                <li>
+                                    Cislo uctu(IBAN): {{ settings.bank_account }}
+                                </li>
+                                <li>
+                                    Variabilny symbol: {{ user_info.variable_symbol }}
+                                </li>
+                                <li>
+                                    Suma na uhradu: {{ user_info.credit_for_recharge }}EUR
+                                </li>
+                                <li>
+                                    Datum splatnosti: {{ due_date }}
+                                </li>
                             </ul>
-                            <h6 class="text-uppercase text-body text-center text-xs font-weight-bolder">Aktualny
-                                kredit</h6>
-                            <div class="p-2 rounded bg-gradient-success">
-                                <div class="numbers">
-                                    <h5 class="font-weight-bolder text-center mb-0">
-                                        {{ credit }} EUR
-                                    </h5>
-                                </div>
-                            </div>
                         </div>
+
                         <div>
-                            <a href="{% url 'recharge_credit' %}" class="btn btn-round bg-gradient-info btn-lg w-100 mt-4 mb-0">
-                                Dobit kredit
+                            <a href="{% url 'my_home' %}" class="btn bg-gradient-primary btn-lg w-100 mt-4 mb-0">
+                                Domov
                             </a>
                         </div>
+
                     </div>
                 </div>
             </div>
+        </div>
 {% endblock main %}

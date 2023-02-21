@@ -1,0 +1,45 @@
+{% extends 'dashboard.html' %}
+{% block title %}Kredity{% endblock title %}
+{% block main %}
+        <section class="py-3 container">
+    <div class="card">
+        <!-- Card header -->
+        <div class="card-header">
+            <h5 class="mb-0">Zoznam ziadosti na navysenie kreditu</h5>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush" id="datatable-basic">
+                <thead class="thead-light">
+                <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Variabliny symbol</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Meno</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Mobile</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Suma</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Datum splatnosti</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% for inv in invoices %}
+                        <td class="text-sm font-weight-normal">{{ inv.user_info.variable_symbol }}</td>
+                        <td class="text-sm font-weight-normal">{{ inv.user_info.user }}</td>
+                        <td class="text-sm font-weight-normal">{{ inv.user_info.user.username }}</td>
+                        <td class="text-sm font-weight-normal">{{ inv.user_info.user.mobile }}</td>
+                        <td class="text-sm font-weight-normal">{{ inv.value }}</td>
+                        <td class="text-sm font-weight-normal">{{ inv.due_date }}</td>
+                        <td class="text-sm content-right font-weight-normal d-flex flex-row-reverse">
+                            <a class="btn btn-sm bg-gradient-danger" href="{% url 'request_delete' pk=inv.id %}">Zmazat</a>
+                            <a class="btn btn-sm bg-gradient-success mx-4" href="{% url 'add_credit' pk=inv.id %}">Potvrdit</a>
+                        </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+        </section>
+{% endblock %}
+
+

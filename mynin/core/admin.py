@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .forms import CustomCreateUserForm, CustomUserChangeForm
-from .models import Invitation, UserProfile, ProfileStatus, Settings, CustomUser
+from .models import Invitation, UserProfile, ProfileStatus, Settings, CustomUser, Invoice
 
 
 class CustomUserAdmin(UserAdmin):
@@ -29,5 +29,6 @@ admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(ProfileStatus)
 admin.site.register(UserProfile)
 admin.site.register(Invitation)
+admin.site.register(Invoice)
 # admin.site.register(Teamleader)
 admin.site.register(Settings)
