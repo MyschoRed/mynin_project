@@ -1,5 +1,5 @@
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs shadow-md border-0 border-radius-xl my-3 fixed-start ms-3 "
-       id="sidenav-main">
+       id="sidenav-main" data-color="warning">
     <div class="sidenav-header">
         <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
            aria-hidden="true" id="iconSidenav"></i>
@@ -151,6 +151,12 @@
 
                     <div class="collapse show" id="applicationsExamples">
                         <ul class="nav ms-4 ps-3">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'create_user' %}">
+                                    <span class="sidenav-mini-icon"> D </span>
+                                    <span class="sidenav-normal"> Vytvorit uzivatela </span>
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'invite' %}">
                                     <span class="sidenav-mini-icon"> D </span>

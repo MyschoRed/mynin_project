@@ -54,7 +54,7 @@ class CustomCreateUserForm(UserCreationForm):
         attrs={'class': 'form-control', 'placeholder': 'Adresa'}))
     city = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'Mesto'}))
-    postal_code = forms.CharField(widget=forms.TextInput(
+    postal_code = forms.IntegerField(widget=forms.TextInput(
         attrs={'class': 'form-control', 'placeholder': 'PSC'}))
     password1 = forms.CharField(widget=forms.PasswordInput(
         attrs={

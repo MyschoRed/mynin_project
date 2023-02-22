@@ -1,4 +1,4 @@
-{% extends 'dashboard.html' %}
+{% extends 'dashboard/dashboard.html' %}
 {% block title %}Domov{% endblock title %}
 {% block main %}
     <div class="row mx-2">
@@ -7,7 +7,7 @@
                 <div class="card card-background card-background-mask-info h-100 tilt" data-tilt=""
                      style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
                     <div class="full-background"
-                         style="background-image: url('../../assets/img/curved-images/white-curved.jpg')"></div>
+                         style="background-image: url('../../../assets/img/curved-images/white-curved.jpg')"></div>
                     <div class="card-body pt-4 text-center">
                         <h2 class="text-white mb-0 mt-2 up">Stav uctu</h2>
                         <h1 class="text-white mb-0 up">{{ currentBalance }}</h1>
@@ -36,7 +36,7 @@
                 <div class="card card-background card-background-mask-success h-100 tilt" data-tilt=""
                      style="will-change: transform; transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1);">
                     <div class="full-background"
-                         style="background-image: url('../../assets/img/curved-images/white-curved.jpg')"></div>
+                         style="background-image: url('../../../assets/img/curved-images/white-curved.jpg')"></div>
                     <div class="card-body pt-4 text-center">
                         <h2 class="text-white mb-0 mt-2 up">Aktualny pocet clenov</h2>
                         <h1 class="text-white mb-0 up">{{ all_members }}</h1>
@@ -63,8 +63,8 @@
         </div>
     </div>
 
-    <script src="../../assets/js/plugins/tilt.min.js"></script>
-    <script src="../../assets/js/plugins/chartjs.min.js"></script>
+    <script src="../../../assets/js/plugins/tilt.min.js"></script>
+    <script src="../../../assets/js/plugins/chartjs.min.js"></script>
     <script>
         var ctx2 = document.getElementById("line-chart-gradient").getContext("2d");
         var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);

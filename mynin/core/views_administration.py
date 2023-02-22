@@ -1,26 +1,41 @@
 import datetime
 
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render, redirect
-
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.template.loader import render_to_string
+from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import send_mail
+from django.shortcuts import render, get_object_or_404, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
-from .models import UserProfile, Invitation, Settings, CustomUser, Invoice
-from .forms import CustomCreateUserForm, SettingsForm, InviteForm, RechargeCreditForm
-from .web_scraper import balanceScraper
+from django.views.generic import ListView, CreateView
+
+from .forms import InviteForm, SettingsForm, CustomCreateUserForm
+from .models import Invoice, Invitation, CustomUser, Settings, UserProfile
+
+
+# *************** SETTINGS ****************#
+def settings(request):
+    obj = get_object_or_404(Settings, id=1)
+    form = SettingsForm(request.POST or None, instance=obj)
+    if form.is_valid():
+        form.save()
+        return redirect('settings')
+    ctx = {'form': form}
+    return render(request, 'administration/settings.html', ctx)
 
 
 # *************** ADMINISTRATION ****************#
+
+class CreateUserView(CreateView):
+    form_class = CustomCreateUserForm
+    success_url = reverse_lazy('requests_for_invitation')
+    template_name = 'dashboard/create_user.html'
+
+
 class UserListView(ListView):
-    template_name = 'user_list.html'
+    template_name = 'administration/user_list.html'
     context_object_name = 'user_list'
 
     def get_queryset(self):
         return CustomUser.objects.all()
-
 
 
 def invite(request):
@@ -48,19 +63,29 @@ def invite(request):
                 return redirect('low_credit')
     else:
         form = InviteForm()
-    return render(request, "invite.html", {"form": form, 'invite_price': invite_price})
+    return render(request, 'administration/invite.html', {"form": form, 'invite_price': invite_price})
 
 
 def invite_sended(request):
-    return render(request, 'invite_sended.html')
+    return render(request, 'administration/invite_sended.html')
 
 
 def request_sended(request):
-    return render(request, 'request_sended.html')
+    return render(request, 'administration/request_sended.html')
+
+
+def request_delete(request, pk):
+    obj = get_object_or_404(Invitation, id=pk)
+
+    if request.method == "POST":
+        obj.delete()
+        return redirect('requests_for_invitation')
+
+    return render(request, 'administration/request_delete.html')
 
 
 def low_credit(request):
-    return render(request, 'low_credit.html')
+    return render(request, 'administration/low_credit.html')
 
 
 def recharge_credit(request):
@@ -78,7 +103,7 @@ def recharge_credit(request):
                   html_message=html)
         return redirect('recharge_confirm')
 
-    return render(request, 'recharge_credit.html')
+    return render(request, 'administration/recharge_credit.html')
 
 
 def recharge_confirm(request):
@@ -101,7 +126,8 @@ def recharge_confirm(request):
         'settings': settings_data,
         'due_date': due_date
     }
-    return render(request, 'recharge_confirm.html', ctx)
+    return render(request, 'administration/recharge_confirm.html', ctx)
+
 
 @user_passes_test(lambda user: user.is_superuser)
 def requests_for_invitation(request):
@@ -110,7 +136,8 @@ def requests_for_invitation(request):
     context = {
         'invitations': invitations,
     }
-    return render(request, 'requests_for_invitation.html', context)
+    return render(request, 'administration/requests_for_invitation.html', context)
+
 
 @user_passes_test(lambda user: user.is_superuser)
 def credit_administration(request):
@@ -120,7 +147,8 @@ def credit_administration(request):
         'invoices': invoices,
     }
 
-    return render(request, 'credit_administration.html', ctx)
+    return render(request, 'administration/credit_administration.html', ctx)
+
 
 @user_passes_test(lambda user: user.is_superuser)
 def add_credit(request, pk):
@@ -134,98 +162,4 @@ def add_credit(request, pk):
         print('obj vymazany')
         return redirect('credit_administration')
 
-    return render(request, 'add_credit.html')
-
-
-
-# ________ SETTINGS ________#
-def settings(request):
-    obj = get_object_or_404(Settings, id=1)
-    form = SettingsForm(request.POST or None, instance=obj)
-    if form.is_valid():
-        form.save()
-        return redirect('settings')
-    ctx = {'form': form}
-    return render(request, 'settings.html', ctx)
-
-
-# *************** DASHBOARD ****************#
-
-
-@login_required(login_url="login")
-def home(requset):
-    # pocet clenov
-    all_members = len(UserProfile.objects.all())
-
-    # aktualny stav uctu
-    url = 'https://ib.fio.sk/ib/transparent?a=2301819780'  # mynin
-    # url = 'https://ib.fio.sk/ib/transparent?a=2502312724'  # vela riadkovy ucet
-    tableData = balanceScraper(url)
-    currentBalance = ''
-    for v in tableData.get('Bežný zostatok'):
-        currentBalance = v
-
-    return render(requset, 'home.html', context={
-        'all_members': all_members,
-        'tableData': tableData,
-        'currentBalance': currentBalance,
-    })
-
-
-def my_home(request):
-    if request.user.is_authenticated:
-        try:
-            user_profile = request.user.userprofile
-        except UserProfile.DoesNotExist:
-            print('profil neexistuje')
-        credit = user_profile.credit
-        pp = user_profile.primary_points
-        sp = user_profile.secondary_points
-        tp = user_profile.team_points
-        bp = user_profile.bonus_points
-        sum_points = pp + sp + tp + bp
-        status = user_profile.set_status()
-
-        return render(request, 'my_home.html', context={
-            'user_profile': user_profile,
-            'pp': pp,
-            'sp': sp,
-            'tp': tp,
-            'bp': bp,
-            'sum_points': sum_points,
-            'status': status,
-            'credit': credit,
-        })
-
-    else:
-        return render(request, 'access_denied.html')
-
-
-class CreateUserView(CreateView):
-    form_class = CustomCreateUserForm
-    success_url = reverse_lazy('requests_for_invitation')
-    template_name = 'create_user.html'
-
-
-def request_delete(request, pk):
-    obj = get_object_or_404(Invitation, id=pk)
-
-    if request.method == "POST":
-        obj.delete()
-        return redirect("requests_for_invitation")
-
-    return render(request, "request_delete.html")
-
-
-# *************** PROJECTS ****************#
-
-def new_project(request):
-    return render(request, 'new_project.html')
-
-
-def projects_in(request):
-    return render(request, 'projects_in.html')
-
-
-def projects_out(request):
-    return render(request, 'projects_out.html')
+    return render(request, 'administration/add_credit.html')

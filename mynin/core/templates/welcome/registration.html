@@ -11,8 +11,8 @@
                         <p class="text-center">Zadaj udeje pre regisdtraciu</p>
                     </div>
                     <form role="form" method="POST" autocomplete="off" novalidate class="site-form">
-                        {{ form.non_field_errors }}
                         {% csrf_token %}
+                        {{ form.non_field_errors }}
                         <label class="col-form-label">Email</label>
                         <div class="mb-3">
                             {{ form.username }}
@@ -21,36 +21,42 @@
                         <label class="col-form-label">Meno</label>
                         <div class="mb-3">
                             {{ form.first_name }}
+                            {{ form.first_name.errors }}
                         </div>
                         <label class="col-form-label">Priezvisko</label>
                         <div class="mb-3">
                             {{ form.last_name }}
+                            {{ form.first_name.errors }}
                         </div>
                         <label class="col-form-label">Telefonne cislo</label>
                         <div class="mb-3">
                             {{ form.mobile }}
+                            {{ form.first_name.errors }}
                         </div>
                         <label class="col-form-label">Ulica a cislo</label>
                         <div class="mb-3">
                             {{ form.address }}
+                            {{ form.first_name.errors }}
                         </div>
                         <label class="col-form-label">Mesto</label>
                         <div class="mb-3">
                             {{ form.city }}
+                            {{ form.first_name.errors }}
                         </div>
                         <label class="col-form-label">PSC</label>
                         <div class="mb-3">
                             {{ form.postal_code }}
+                            {{ form.postal_code.errors }}
                         </div>
                         <label class="col-form-label">Heslo</label>
                         <div class="mb-3">
                             {{ form.password1 }}
-                            {{ form.username.errors }}
+                            {{ form.password1.errors }}
                         </div>
                         <label class="col-form-label">Zopakuj heslo</label>
                         <div class="mb-3">
                             {{ form.password2 }}
-                            {{ form.username.errors }}
+                            {{ form.password2.errors }}
                         </div>
 
 
