@@ -14,18 +14,18 @@ urlpatterns = [
     path('dashboard/', views.home, name='home'),
     path('dashboard/home/', views.home, name='home'),
     path('dashboard/my_home/', views.my_home, name='my_home'),
+    path('dashboard/recharge_credit/', views.recharge_credit, name='recharge_credit'),
+    path('dashboard/recharge_confirm/', views.recharge_confirm, name='recharge_confirm'),
+    path('dashboard/invite/', views.invite, name='invite'),
+    path('dashboard/request_sended/', views.request_sended, name='request_sended'),
+    path('dashboard/invite_sended/', views.invite_sended, name='invite_sended'),
 
     path('projects/new_project/', views.new_project, name='new_project'),
     path('projects/projects_in/', views.projects_in, name='projects_in'),
     path('projects/projects_out/', views.projects_out, name='projects_out'),
 
     path('administraton/create_user/', views.CreateUserView.as_view(), name='create_user'),
-    path('administraton/invite/', views.invite, name='invite'),
-    path('administraton/invite_sended/', views.invite_sended, name='invite_sended'),
-    path('administraton/request_sended/', views.request_sended, name='request_sended'),
     path('administraton/low_credit/', views.low_credit, name='low_credit'),
-    path('administraton/recharge_credit/', views.recharge_credit, name='recharge_credit'),
-    path('administraton/recharge_confirm/', views.recharge_confirm, name='recharge_confirm'),
     path('administraton/user_list/', views.UserListView.as_view(), name='user_list'),
     path('administraton/settings/', views.settings, name='settings'),
 

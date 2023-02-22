@@ -30,7 +30,7 @@
                         <td class="text-sm font-weight-normal">{{ inv.value }}</td>
                         <td class="text-sm font-weight-normal">{{ inv.due_date }}</td>
                         <td class="text-sm content-right font-weight-normal d-flex flex-row-reverse">
-                            <a class="btn btn-sm bg-gradient-danger" href="{% url 'request_delete' pk=inv.id %}">Zmazat</a>
+{#                            <a class="btn btn-sm bg-gradient-danger" href="{% url 'request_delete' pk=inv.id %}">Zmazat</a>#}
                             <a class="btn btn-sm bg-gradient-success mx-4" href="{% url 'add_credit' pk=inv.id %}">Potvrdit</a>
                         </td>
                         </tr>

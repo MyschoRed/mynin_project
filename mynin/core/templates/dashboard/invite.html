@@ -1,8 +1,8 @@
 {% extends 'dashboard/dashboard.html' %}
 {% block title %}Pozvat clena{% endblock title %}
 {% block main %}
-    <section class="container mt-8 w-sm-50">
-    <h3 class="font-weight-bolder text-center text-primary text-gradient">Odoslat pozvanku</h3>
+    <section class="container max-width-400 mt-8 w-sm-50">
+    <h3 class="font-weight-bolder text-center text-warning text-gradient">Odoslat pozvanku</h3>
         <p class="text-center text-dark">Po odoslani pozvanky vam bude odratany kredit {{ invite_price }}EUR</p>
         <form role="form" class="site-form" method="post">
             {% csrf_token %}
@@ -12,7 +12,7 @@
             </div>
             {{ form.errors }}
             <div class="text-center">
-                <input type="submit" value="Odoslat pozvanku" class="btn bg-gradient-primary w-100 mt-4 mb-0">
+                <input type="submit" value="Odoslat pozvanku" class="btn bg-gradient-faded-warning w-100 mt-4 mb-0">
             </div>
         </form>
     </section>
