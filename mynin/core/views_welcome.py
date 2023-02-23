@@ -11,6 +11,7 @@ def welcome(request):
 def registration(request):
     form = CustomCreateUserForm
     if request.method == 'POST':
+
         form = CustomCreateUserForm(request.POST)
         if form.is_valid():
             form.save()

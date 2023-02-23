@@ -64,8 +64,10 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=64)
     postal_code = models.CharField(max_length=6)
 
+    is_email_verified = models.BooleanField(default=False, null=None)
+
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.first_name} {self.last_name}, {self.username}"
 
 
 """

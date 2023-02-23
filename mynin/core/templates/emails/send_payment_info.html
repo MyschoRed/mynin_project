@@ -1,8 +1,35 @@
 <h2>Dobrý deň!</h2>
-<p>Pozívame Vás sa registrovať u nás v aplikácií mynin</p>
-<a href="http://127.0.0.1:8000/registration/">Pozvánka</a>
+<p>Platobne pokyny k navyseniu kreditu</p>
 
 Platobne udaje
+
+<div class="col my-4">
+                            <ul>
+                                <li>
+                                    Meno zakaznika: {{ user.first_name }} {{ user.last_name }}</li>
+                                <li>
+                                    Adresa: {{ user_info.user.address }}, {{ user_info.user.city }} {{ user_info.user.postal_code }}
+                                </li>
+                                <li>
+                                    Telefonne cislo: {{ user.mobile }}
+                                </li>
+                                <li>
+                                    Email: {{ user.username }}
+                                </li>
+                                <li>
+                                    Cislo uctu(IBAN): {{ settings.bank_account }}
+                                </li>
+                                <li>
+                                    Variabilny symbol: {{ user_info.variable_symbol }}
+                                </li>
+                                <li>
+                                    Suma na uhradu: {{ user_info.credit_for_recharge }}EUR
+                                </li>
+                                <li>
+                                    Datum splatnosti: {{ due_date }}
+                                </li>
+                            </ul>
+                        </div>
 
 S pozdravom/Regards,
 mynin

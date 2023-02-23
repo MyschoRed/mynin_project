@@ -103,15 +103,27 @@ def request_sended(request):
 
 def recharge_credit(request):
     if request.method == 'POST':
+
         email = request.user.username
         credit = request.POST.get('credit')
+        user_info = get_object_or_404(UserProfile, id=request.user.pk)
+        settings_data = get_object_or_404(Settings, id=1)
+
         if credit == 'other':
             choice = request.POST.get('other')
         else:
             choice = request.POST.get('credit')
         request.user.userprofile.credit_for_recharge = float(choice)
         request.user.userprofile.save()
-        html = render_to_string('emails/send_payment_info.html', {'email': email})
+
+        ctx = {
+            'email': email,
+            'user': request.user,
+            'user_info': user_info,
+            'settings_data': settings_data,
+        }
+        html = render_to_string('emails/send_payment_info.html', ctx)
+
         send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'noreply@mynin.eu', [email],
                   html_message=html)
         return redirect('recharge_confirm')
@@ -140,6 +152,3 @@ def recharge_confirm(request):
         'due_date': due_date
     }
     return render(request, 'dashboard/recharge_confirm.html', ctx)
-
-
-

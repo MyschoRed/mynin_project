@@ -1,12 +1,16 @@
 {% extends 'dashboard/dashboard.html' %}
 {% block title %}Dobit kredit{% endblock title %}
 {% block main %}
-<div class="pl-5 py-5 bg-blue-300">
-    <p class="font-bold text-xl">Naozaj chces zapisat kredit?</p>
-<form method="POST">
-    {% csrf_token %}
-    <input class="ml-5 mt-2 px-2 rounded bg-red-400" type="submit" value="Zapisat" />
-    <a class="ml-5 mt-2 px-2 rounded bg-blue-400" href="{% url 'credit_administration' %}">Zrusit </a>
-</form>
-</div>
+    <div class="container max-width-400 mt-8 w-sm-50">
+        <div class="col card card-body">
+            <h5 class="text-success text-center">Naozaj chces zapisat kredit?</h5>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="">
+                    <input class="text-center btn btn-success mx-5 me-5" type="submit" value="Zapisat"/>
+                    <a class="text-center btn btn-danger" href="{% url 'credit_administration' %}">Zrusit </a>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock main %}

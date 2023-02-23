@@ -13,16 +13,29 @@ class CustomUserAdmin(UserAdmin):
         'username',
         'first_name',
         'last_name',
-        'mobile',
-        'address',
-        'city',
-        'postal_code']
+        'is_email_verified',
+        'is_superuser',
+        'is_active',
+        'is_staff'
+    ]
+    fieldsets = (
+        ('Login', {'fields': ('username', 'password')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'address', 'city', 'mobile')}),
+        ('Permissions', {'fields': ('is_email_verified', 'is_staff', 'is_superuser', 'is_active')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'first_name', 'address')}
+         ),
+    )
 
-    def address(self, obj):
-        return obj.profile.address
 
-    address.admin_order_field = 'profile__address'
-    address.short_description = 'Address'
+    # def address(self, obj):
+    #     return obj.profile.address
+    #
+    # address.admin_order_field = 'profile__address'
+    # address.short_description = 'Address'
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
