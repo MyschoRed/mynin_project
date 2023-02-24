@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView
 
 from .forms import SettingsForm, CustomCreateUserForm
-from .models import Invoice, Invitation, CustomUser, Settings
+from .models import Invoice, Invitation, CustomUser, Settings, UserProfile
 
 
 # *************** SETTINGS ****************#
@@ -36,7 +36,19 @@ class UserListView(ListView):
         return CustomUser.objects.all()
 
 
+def activate_user_account(request, pk):
+    user = get_object_or_404(CustomUser, id=pk)
 
+    if request.method == "POST":
+        user.has_profile = True
+        user.save()
+
+        user_profile = UserProfile()
+        user_profile.user = user
+        user_profile.save(user)
+        return redirect('user_list')
+
+    return render(request, 'administration/activate_user_account.html')
 
 
 def request_delete(request, pk):
@@ -53,14 +65,13 @@ def low_credit(request):
     return render(request, 'administration/low_credit.html')
 
 
-
-
 @user_passes_test(lambda user: user.is_superuser)
 def requests_for_invitation(request):
     invitations = Invitation.objects.all()
 
     context = {
         'invitations': invitations,
+
     }
     return render(request, 'administration/requests_for_invitation.html', context)
 
@@ -85,7 +96,6 @@ def add_credit(request, pk):
         obj.user_info.credit_for_recharge = 0
         obj.user_info.save()
         obj.delete()
-        print('obj vymazany')
         return redirect('credit_administration')
 
     return render(request, 'administration/add_credit.html')

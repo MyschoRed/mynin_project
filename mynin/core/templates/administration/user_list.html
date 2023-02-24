@@ -3,9 +3,9 @@
 {% block main %}
     <section class="py-3 container">
         <div class="card">
-        <div class="card-header">
-            <h5  class="mb-0">Zoznam clenov</h5>
-        </div>
+            <div class="card-header">
+                <h5 class="mb-0">Zoznam clenov</h5>
+            </div>
             <!-- Card header -->
             <div class="table-responsive">
                 <table class="table align-items-center table-flush" id="datatable-basic">
@@ -14,15 +14,29 @@
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Meno</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stav uctu</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for u in user_list %}
-                    <tr>
-                        <td class="text-sm font-weight-normal">{{ u.first_name }} {{ u.last_name }}</td>
-                        <td class="text-sm font-weight-normal">{{ u.username }}</td>
-                        <td class="text-sm font-weight-normal">{{ u.status }}</td>
-                    </tr>
+                        <tr>
+                            <td class="text-sm font-weight-normal">{{ u.first_name }} {{ u.last_name }}</td>
+                            <td class="text-sm font-weight-normal">{{ u.username }}</td>
+                            <td class="text-sm font-weight-normal">{{ u.userprofile.status }}</td>
+                            <td class="text-sm font-weight-normal">
+                                {% if u.has_profile == True %}
+                                    <span class="text-success">Aktivovany</span>
+                                {% elif u.has_profile == False %}
+                                    <span class="text-danger">Neaktivovany</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if u.has_profile == False %}
+                                <a class="btn btn-sm bg-gradient-success mx-4" href="{% url 'activate_user_account' pk=u.id %}">Aktivovat</a>
+                                {% endif %}
+                            </td>
+                        </tr>
                     {% endfor %}
                     </tbody>
                 </table>

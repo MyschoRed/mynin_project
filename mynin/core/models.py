@@ -16,16 +16,6 @@ class Settings(models.Model):
         return f"Zoznam nastaveni"
 
 
-"""
-Pozvanie. Posle email s informaciami o registracii. 
-Email obsahuje email.
-"""
-class Invitation(models.Model):
-    email = models.CharField(max_length=256)
-
-    def __str__(self):
-        return f"{self.email}"
-
 
 """
 Toto este treba domysliet...
@@ -64,6 +54,7 @@ class CustomUser(AbstractUser):
     city = models.CharField(max_length=64)
     postal_code = models.CharField(max_length=6)
 
+    has_profile = models.BooleanField(default=False, null=None)
     is_email_verified = models.BooleanField(default=False, null=None)
 
     def __str__(self):
@@ -81,8 +72,8 @@ class UserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='userprofile')
     created = models.DateTimeField(default=timezone.now)
     # status = models.ForeignKey(ProfileStatus, on_delete=models.CASCADE)
-    status = models.CharField(max_length=32)
-    registrations = models.IntegerField(blank=True, null=True)
+    status = models.CharField(default='Clen', max_length=32)
+    registrations = models.IntegerField(default=0, blank=True, null=True)
     primary_points = models.IntegerField(default=0, blank=True, null=True)
     secondary_points = models.IntegerField(default=0, blank=True, null=True)
     team_points = models.IntegerField(default=0, blank=True, null=True)
@@ -122,6 +113,18 @@ class UserProfile(models.Model):
 #
 #     def __str__(self):
 #         return f"Kredit: {self.credit} EUR"
+
+class Invitation(models.Model):
+    """
+    Pozvanie. Posle email s informaciami o registracii.
+    Email obsahuje email.
+    """
+    email = models.CharField(max_length=256)
+    inviter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f"{self.email}, pozval: {self.inviter}"
+
 
 class Invoice(models.Model):
     user_info = models.ForeignKey(UserProfile, on_delete=models.CASCADE)

@@ -18,7 +18,8 @@ urlpatterns = [
     path('dashboard/recharge_confirm/', views.recharge_confirm, name='recharge_confirm'),
     path('dashboard/invite/', views.invite, name='invite'),
     path('dashboard/request_sended/', views.request_sended, name='request_sended'),
-    path('dashboard/invite_sended/', views.invite_sended, name='invite_sended'),
+    path('dashboard/invite_sended/', views.error_invite_sended, name='error_invite_sended'),
+    path('dashboard/account_exists/', views.error_account_exists, name='error_account_exists'),
 
     path('projects/new_project/', views.new_project, name='new_project'),
     path('projects/projects_in/', views.projects_in, name='projects_in'),
@@ -27,6 +28,7 @@ urlpatterns = [
     path('administraton/create_user/', views.CreateUserView.as_view(), name='create_user'),
     path('administraton/low_credit/', views.low_credit, name='low_credit'),
     path('administraton/user_list/', views.UserListView.as_view(), name='user_list'),
+    path('administraton/activate_user_account/<pk>', views.activate_user_account, name='activate_user_account'),
     path('administraton/settings/', views.settings, name='settings'),
 
     path('administraton/requests_for_invitation/', views.requests_for_invitation, name='requests_for_invitation'),

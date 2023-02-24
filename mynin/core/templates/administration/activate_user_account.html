@@ -1,0 +1,12 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block main %}
+<div class="">
+    <p class="">Aktivovat ucet?</p>
+<form method="POST">
+    {% csrf_token %}
+    <input class="" type="submit" value="Aktivovat" />
+    <a class="" href="{% url 'user_list' %}">Zrusit </a>
+</form>
+</div>
+{% endblock %}

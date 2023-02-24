@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 
 from .forms import InviteForm
-from .models import UserProfile, Invoice, Settings, Invitation
+from .models import UserProfile, Invoice, Settings, Invitation, CustomUser
 from .web_scraper import balanceScraper
 
 
@@ -15,6 +15,8 @@ from .web_scraper import balanceScraper
 
 def access_denied(request):
     render(request, 'access_denied.html')
+
+
 @login_required(login_url="login")
 def home(requset):
     # pocet clenov
@@ -33,6 +35,7 @@ def home(requset):
         'tableData': tableData,
         'currentBalance': currentBalance,
     })
+
 
 @login_required(login_url="login")
 def my_home(request):
@@ -66,40 +69,65 @@ def my_home(request):
         'credit': credit,
     })
 
+
 def invite(request):
     set_data = Settings.objects.get(pk=1)
     invite_price = set_data.invite_price
-    if request.method == "POST":
-        email = request.POST.get("email")
-        invitations = Invitation.objects.filter(email=email)
-        form = InviteForm(request.POST)
+    inviter = request.user
+    if request.user.is_authenticated:
+        try:
+            user_profile = request.user.userprofile
+            print('uzivatel ma profil')
+        except UserProfile.DoesNotExist:
+            print('profil uzivatela neexistuje')
+            return render(request, 'dashboard/error_user_profile.html')
 
-        if form.is_valid() and invitations.exists():
-            print('emial uz bol odoslany')
-            return redirect('invite_sended')
-        else:
-            if request.user.userprofile.credit >= invite_price:
-                form.save()
-                request.user.userprofile.credit = request.user.userprofile.credit - invite_price
-                request.user.userprofile.registrations += 1
-                request.user.userprofile.save()
-                html = render_to_string('emails/send_invite.html', {'email': email})
-                send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'noreply@mynin.eu', [email],
-                          html_message=html)
-                return redirect('request_sended')
+        if request.method == "POST":
+            email = request.POST.get("email")
+            invitations = Invitation.objects.filter(email=email)
+            user = CustomUser.objects.filter(email=email)
+            form = InviteForm(request.POST)
+
+            if form.is_valid() and invitations.exists():
+                return redirect('error_invite_sended')
+            elif user:
+                return redirect('error_account_exists')
             else:
-                return redirect('low_credit')
-    else:
-        form = InviteForm()
-    return render(request, 'dashboard/invite.html', {"form": form, 'invite_price': invite_price})
+                if request.user.userprofile.credit >= invite_price:
+                    Invitation.inviter = request.user
+                    form.save()
+                    request.user.userprofile.credit = request.user.userprofile.credit - invite_price
+                    request.user.userprofile.registrations += 1
+                    request.user.userprofile.save()
+                    html = render_to_string('emails/send_invite.html', {'email': email})
+                    send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'noreply@mynin.eu', [email],
+                              html_message=html)
+                    return redirect('request_sended')
+                else:
+                    return redirect('low_credit')
+
+        else:
+            form = InviteForm()
+        print(inviter)
+        ctx = {
+            "form": form,
+            'invite_price': invite_price,
+            'inviter': inviter,
+        }
+        return render(request, 'dashboard/invite.html', ctx)
 
 
-def invite_sended(request):
-    return render(request, 'dashboard/invite_sended.html')
+def error_invite_sended(request):
+    return render(request, 'dashboard/error_invite_sended.html')
+
+
+def error_account_exists(r):
+    return render(r, 'dashboard/error_account_exists.html')
 
 
 def request_sended(request):
     return render(request, 'dashboard/request_sended.html')
+
 
 def recharge_credit(request):
     if request.method == 'POST':
@@ -113,6 +141,7 @@ def recharge_credit(request):
             choice = request.POST.get('other')
         else:
             choice = request.POST.get('credit')
+
         request.user.userprofile.credit_for_recharge = float(choice)
         request.user.userprofile.save()
 

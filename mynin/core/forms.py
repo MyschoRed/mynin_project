@@ -100,7 +100,7 @@ class InviteForm(forms.ModelForm):
 
     class Meta:
         model = Invitation
-        fields = ["email"]
+        fields = ['email']
 
 
 class RechargeCreditForm(forms.ModelForm):

@@ -1,0 +1,9 @@
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Zoznam clenov{% endblock title %}
+{% block main %}
+    <section class="container w-50 my-10">
+        <h3 class="font-weight-bolder text-center text-warning text-gradient">Ucet s tymto emailom uz existuje!</h3>
+    <a href="{% url 'invite' %}" class="mt-5 d-flex justify-content-center btn btn-warning ">Spat</a>
+    </section>
+
+{% endblock main %}
