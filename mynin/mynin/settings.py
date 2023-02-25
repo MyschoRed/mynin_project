@@ -5,14 +5,12 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-h^vr(u8@k%l41l77)4vc-3#v!j*pd^o#$*lz7dg9f3td301yjb'
-# with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
-#    SECRET_KEY = f.read().strip()
+with open(os.path.join(BASE_DIR, 'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['mynin.spiso.eu', 'www.mynin.spiso.eu']
 ALLOWED_HOSTS = ['*']
 
 # EMAIL
