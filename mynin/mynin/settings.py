@@ -13,10 +13,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL
 EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = 'bbc08bab5f0b8a'
-EMAIL_HOST_PASSWORD = '96085e3b0881c4'
+EMAIL_HOST_USER = '31e80bad83c506'
+EMAIL_HOST_PASSWORD = '7d7ad4d590d15a'
 EMAIL_PORT = '2525'
 # Application definition
 INSTALLED_APPS = [
@@ -92,8 +93,9 @@ STATICFILES_DIRS = [
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "core.CustomUser"
-LOGIN_REDIRECT_URL = '/dashboard/home'
+AUTH_USER_MODEL = 'core.CustomUser'
+
+LOGIN_REDIRECT_URL = '/dashboard/my_home'
 LOGOUT_REDIRECT_URL = 'login'
 
 # HTTPS settings

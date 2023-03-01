@@ -1,8 +1,10 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 
 from .models import Invitation, Settings, CustomUser
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordResetForm, \
+    PasswordChangeForm, SetPasswordForm
 
 
 class SettingsForm(forms.ModelForm):
@@ -92,6 +94,34 @@ class CustomUserChangeForm(UserChangeForm):
             'city',
             'postal_code',
         ]
+
+
+class CustomResetPasswordForm(PasswordResetForm):
+    email = forms.EmailField(required=True,
+                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
+
+    class Meta:
+        model = CustomUser
+        fields = ['email']
+
+
+class CustomChangePasswordForm(SetPasswordForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Stare heslo', }))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Nove heslo', }))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(
+        attrs={
+            'class': 'form-control',
+            'placeholder': 'Zopakuj heslo', }))
+
+    class Meta:
+        model = get_user_model()
+        fields = ['new_password1', 'new_password2', 'old_password']
 
 
 class InviteForm(forms.ModelForm):
