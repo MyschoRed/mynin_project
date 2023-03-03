@@ -9,11 +9,9 @@ from django.utils.http import urlsafe_base64_decode
 
 from .emails import activate_email
 from .forms import CustomCreateUserForm, CustomResetPasswordForm, CustomChangePasswordForm
-from .models import CustomUser
+from .models import CustomUser, UserProfile
 
 from .tokens import account_activation_token
-
-
 
 
 # *************** WELCOME ****************#
@@ -31,7 +29,8 @@ def registration(request):
             user = form.save(commit=False)
             user.is_active = False
             user.save()
-            activate_email(request, user, form.cleaned_data.get('username'))
+
+            # activate_email(request, user, form.cleaned_data.get('username'))
             return redirect('/')
         else:
             for error in list(form.errors.values()):

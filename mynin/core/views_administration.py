@@ -45,6 +45,8 @@ def activate_user_account(request, pk):
 
         user_profile = UserProfile()
         user_profile.user = user
+        user_profile.variable_symbol = user_profile.set_variable_symbol(user.pk)
+        # user_profile.set_variable_symbol()
         user_profile.save(user)
         return redirect('user_list')
 

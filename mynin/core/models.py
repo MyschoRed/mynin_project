@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from django.utils import timezone
@@ -14,7 +15,6 @@ class Settings(models.Model):
 
     def __str__(self):
         return f"Zoznam nastaveni"
-
 
 
 """
@@ -61,14 +61,12 @@ class CustomUser(AbstractUser):
         return f"{self.first_name} {self.last_name}, {self.username}"
 
 
-"""
-Uzivatelsky profil. Dedi uzivatela z User. 
-Natavuje status z ProfileStatus.
-Udrziava body pre jednotliveho uzivatela.
-"""
-
-
 class UserProfile(models.Model):
+    """
+    Uzivatelsky profil. Dedi uzivatela z User.
+    Natavuje status z ProfileStatus.
+    Udrziava body pre jednotliveho uzivatela.
+    """
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='userprofile')
     created = models.DateTimeField(default=timezone.now)
     # status = models.ForeignKey(ProfileStatus, on_delete=models.CASCADE)
@@ -89,8 +87,11 @@ class UserProfile(models.Model):
             self.status = 'Teamleader I'
         elif 10 <= self.registrations < 50:
             self.status = 'Teamleader II'
-
         return self.status
+
+    def set_variable_symbol(self, pk):
+        self.variable_symbol = 10000000 + int(pk)
+        return self.variable_symbol
 
     def initMember(self):
         if self.user is not None:
@@ -121,5 +122,3 @@ class Invoice(models.Model):
     payment_info = models.ForeignKey(Settings, on_delete=models.CASCADE)
     value = models.CharField(max_length=12)
     due_date = models.DateField()
-
-

@@ -13,6 +13,7 @@
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Meno</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Variabilny symbol</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stav uctu</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"></th>
@@ -23,6 +24,7 @@
                         <tr>
                             <td class="text-sm font-weight-normal">{{ u.first_name }} {{ u.last_name }}</td>
                             <td class="text-sm font-weight-normal">{{ u.username }}</td>
+                            <td class="text-sm font-weight-normal">{{ u.userprofile.variable_symbol }}</td>
                             <td class="text-sm font-weight-normal">{{ u.userprofile.status }}</td>
                             <td class="text-sm font-weight-normal">
                                 {% if u.has_profile == True %}
