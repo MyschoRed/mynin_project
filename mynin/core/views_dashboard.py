@@ -12,7 +12,6 @@ from .web_scraper import balanceScraper
 
 # *************** DASHBOARD ****************#
 
-
 def access_denied(request):
     render(request, 'access_denied.html')
 
