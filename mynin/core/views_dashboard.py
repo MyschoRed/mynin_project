@@ -23,8 +23,8 @@ def home(requset):
     all_members = len(UserProfile.objects.all())
 
     # aktualny stav uctu
-    url = 'https://ib.fio.sk/ib/transparent?a=2301819780'  # mynin
-    # url = 'https://ib.fio.sk/ib/transparent?a=2502312724'  # vela riadkovy ucet
+    # url = 'https://ib.fio.sk/ib/transparent?a=2301819780'  # mynin
+    url = 'https://ib.fio.sk/ib/transparent?a=2502312724'  # vela riadkovy ucet
     tableData = balanceScraper(url)
     currentBalance = ''
     for v in tableData.get('Bežný zostatok'):
