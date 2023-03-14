@@ -1,7 +1,5 @@
-{% autoescape off %}
-Hi ,
+<h2>Ahoj!</h2>
 
-Please click on the link below to confirm your registration:
-
-http://{{ domain }}{% url 'registration_confirm' uidb64=uid token=token %}
-{% endautoescape %}
+Gratulujeme, vytvorenie nového účtu prebehlo úspešne.
+Skôr, ako začnete svoj účet používať, aktivujte ho kliknutím na nasledujúci odkaz:
+<a href="http://{{ domain }}{% url 'registration_confirm' uidb64=uid token=token %}">Porvrdenie registracie</a>

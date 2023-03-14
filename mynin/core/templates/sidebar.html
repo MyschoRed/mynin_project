@@ -53,13 +53,19 @@
                         <li class="nav-item ">
                             <a class="nav-link " href="{% url 'my_home' %}">
                                 <span class="sidenav-mini-icon"> M </span>
-                                <span class="sidenav-normal"> Moj profil </span>
+                                <span class="sidenav-normal"> Môj profil </span>
+                            </a>
+                        </li>
+                         <li class="nav-item ">
+                            <a class="nav-link " href="{% url 'edit_user_profile' %}">
+                                <span class="sidenav-mini-icon"> M </span>
+                                <span class="sidenav-normal"> Upravit profil </span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'invite' %}">
                                 <span class="sidenav-mini-icon"> D </span>
-                                <span class="sidenav-normal"> Pozvat clena </span>
+                                <span class="sidenav-normal"> Pozvať člena </span>
                             </a>
                         </li>
                     </ul>
@@ -115,7 +121,7 @@
                         <li class="nav-item ">
                             <a class="nav-link " href="{% url 'new_project' %}">
                                 <span class="sidenav-mini-icon"> M </span>
-                                <span class="sidenav-normal"> Novy projekt </span>
+                                <span class="sidenav-normal"> Nový projekt </span>
                             </a>
                         </li>
                     </ul>
@@ -152,7 +158,7 @@
                                 </g>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Administracia</span>
+                        <span class="nav-link-text ms-1">Administrácia</span>
                     </a>
 
                     <div class="collapse show" id="applicationsExamples">
@@ -160,19 +166,19 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'create_user' %}">
                                     <span class="sidenav-mini-icon"> D </span>
-                                    <span class="sidenav-normal"> Vytvorit uzivatela </span>
+                                    <span class="sidenav-normal"> Vytvoriť uživateľa </span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'user_list' %}">
                                     <span class="sidenav-mini-icon"> D </span>
-                                    <span class="sidenav-normal"> Zoznam clenov </span>
+                                    <span class="sidenav-normal"> Zoznam členov </span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'requests_for_invitation' %}">
                                     <span class="sidenav-mini-icon"> D </span>
-                                    <span class="sidenav-normal"> Ziadosti o pozvanie </span>
+                                    <span class="sidenav-normal"> Žiadosti o pozvanie </span>
                                 </a>
                             </li>
                             <li class="nav-item">

@@ -7,6 +7,8 @@ from dateutil.relativedelta import relativedelta
 
 today = date.today().strftime('%d-%m-%Y')
 lastYear = (date.today() - relativedelta(years=1)).strftime('%d-%m-%Y')
+
+
 def balanceScraper(url):
     response = requests.get(url)
     html = response.content
@@ -34,6 +36,8 @@ def balanceScraper(url):
                  'Bežný zostatok': beznyZostatok}, ignore_index=True)
 
     return df
+
+
 def accountNumberScraper(url):
     response = requests.get(url)
     html = response.content

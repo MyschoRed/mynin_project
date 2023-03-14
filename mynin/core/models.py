@@ -1,10 +1,12 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils import timezone
 
 
 class Settings(models.Model):
+    """
+    Zakladne nastavenie aplikacie ku ktoremu ma pristup iba administrator.
+    """
     invite_price = models.DecimalField(decimal_places=2, max_digits=5)
     bank_account = models.CharField(max_length=128)
     due_date = models.CharField(max_length=9)
@@ -17,10 +19,10 @@ class Settings(models.Model):
         return f"Zoznam nastaveni"
 
 
-"""
-Toto este treba domysliet...
-"""
 # class Teamleader(models.Model):
+# """
+# Toto este treba domysliet...
+# """
 #     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
 #     team_points = models.IntegerField()
 #     votes = models.IntegerField()
@@ -35,13 +37,11 @@ Toto este treba domysliet...
 #         verbose_name_plural = 'Teamleaders'
 
 
-"""
-Nastavuje status na uzivatelskom profile. 
-Vyber medzi Clen/Teamleader.
-"""
-
-
 class ProfileStatus(models.Model):
+    """
+    Nastavuje status na uzivatelskom profile.
+    Vyber medzi Clen/Teamleader1/Teamleader2/Teamleader3...
+    """
     status = models.CharField(max_length=32)
 
     def __str__(self):
@@ -49,6 +49,9 @@ class ProfileStatus(models.Model):
 
 
 class CustomUser(AbstractUser):
+    """
+    Uziavetelsky upraveny "uzivatel"
+    """
     mobile = models.CharField(max_length=16)
     address = models.CharField(max_length=64)
     city = models.CharField(max_length=64)
@@ -66,6 +69,7 @@ class UserProfile(models.Model):
     Uzivatelsky profil. Dedi uzivatela z User.
     Natavuje status z ProfileStatus.
     Udrziava body pre jednotliveho uzivatela.
+    Obdahuje inforamcie o stave kreditu.
     """
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='userprofile')
     created = models.DateTimeField(default=timezone.now)
@@ -118,6 +122,9 @@ class Invitation(models.Model):
 
 
 class Invoice(models.Model):
+    """
+    Nieco ako faktura. Pokyny pre zaplatenie na dobitie kreditu.
+    """
     user_info = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     payment_info = models.ForeignKey(Settings, on_delete=models.CASCADE)
     value = models.CharField(max_length=12)

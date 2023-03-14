@@ -5,7 +5,8 @@ from django.core.mail import send_mail
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 
-from .forms import InviteForm
+from .emails import recharge_credit_email
+from .forms import InviteForm, CustomUserChangeForm
 from .models import UserProfile, Invoice, Settings, Invitation, CustomUser
 from .web_scraper import balanceScraper
 
@@ -129,8 +130,15 @@ def request_sended(request):
 
 
 def recharge_credit(request):
+    """
+    Po vypleni ziadosti odosle email s pokynmi na uhradu.
+    !!!
+    Treba domysliet ci moze uzivatel poslat viac ziadosti o dobitie kreditu.
+    Ci moze byt viac ziadosti nepotvrdenych...Vtedy NEBUDE
+    fungovat docasna premenna "credit_for_recharge"
+    !!!
+    """
     if request.method == 'POST':
-
         email = request.user.username
         credit = request.POST.get('credit')
         user_info = get_object_or_404(UserProfile, id=request.user.pk)
@@ -144,16 +152,12 @@ def recharge_credit(request):
         request.user.userprofile.credit_for_recharge = float(choice)
         request.user.userprofile.save()
 
-        ctx = {
-            'email': email,
-            'user': request.user,
-            'user_info': user_info,
-            'settings_data': settings_data,
-        }
-        html = render_to_string('emails/send_payment_info.html', ctx)
+        d = int(settings_data.due_date)
+        due_date = datetime.date.today() + datetime.timedelta(days=d)
+        due_date.strftime('%d-%m-%Y')
 
-        send_mail('Ziadost o pozvanie do mynini.eu', 'tu je sprava', 'noreply@mynin.eu', [email],
-                  html_message=html)
+        recharge_credit_email(request, request.user, user_info, settings_data, due_date, email)
+
         return redirect('recharge_confirm')
 
     return render(request, 'dashboard/recharge_credit.html')
@@ -163,7 +167,7 @@ def recharge_confirm(request):
     user_info = get_object_or_404(UserProfile, id=request.user.pk)
     invoice = Invoice()
     settings_data = get_object_or_404(Settings, id=1)
-
+    print(settings_data.bank_account)
     d = int(settings_data.due_date)
     due_date = datetime.date.today() + datetime.timedelta(days=d)
     due_date.strftime('%d-%m-%Y')
@@ -180,3 +184,18 @@ def recharge_confirm(request):
         'due_date': due_date
     }
     return render(request, 'dashboard/recharge_confirm.html', ctx)
+
+
+def edit_user_profile_view(request):
+    user = get_object_or_404(CustomUser, id=request.user.pk)
+    form = CustomUserChangeForm(instance=user)
+
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('edit_user_profile')
+
+
+    ctx = {'form': form}
+    return render(request, 'dashboard/edit_user_profile.html', ctx)

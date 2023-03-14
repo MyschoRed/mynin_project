@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.db.models import Q
@@ -9,12 +9,9 @@ from django.utils.http import urlsafe_base64_decode
 
 from .emails import activate_email
 from .forms import CustomCreateUserForm, CustomResetPasswordForm, CustomChangePasswordForm
-from .models import CustomUser, UserProfile
-
 from .tokens import account_activation_token
 
 
-# *************** WELCOME ****************#
 def welcome(request):
     return render(request, "welcome/login.html")
 
@@ -30,7 +27,7 @@ def registration(request):
             user.is_active = False
             user.save()
 
-            # activate_email(request, user, form.cleaned_data.get('username'))
+            activate_email(request, user, form.cleaned_data.get('username'))
             return redirect('/')
         else:
             for error in list(form.errors.values()):

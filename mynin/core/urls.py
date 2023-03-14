@@ -1,11 +1,10 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView
-from . import views, views_welcome, views_dashboard, views_administration, views_projects
+from . import views_welcome, views_dashboard, views_administration, views_projects
 from .forms import CustomLoginForm
 
 urlpatterns = [
     path('access_denied/', views_dashboard.access_denied, name='access_denied'),
-
     path('login/', LoginView.as_view(template_name="welcome/login.html", authentication_form=CustomLoginForm),
          name='login'),
     path('welcome/password_reset/', views_welcome.password_reset_request, name='password_reset_request'),
@@ -13,7 +12,7 @@ urlpatterns = [
     path('welcome/password_change/', views_welcome.password_change, name='password_change'),
     path('registration/', views_welcome.registration, name='registration'),
     path('registration_confirm/<uidb64>/<token>', views_welcome.registration_confirm, name='registration_confirm'),
-
+    path('edit_user_profile/', views_dashboard.edit_user_profile_view, name='edit_user_profile'),
     path('', views_dashboard.home, name='home'),
     path('dashboard/home/', views_dashboard.home, name='home'),
     path('dashboard/my_home/', views_dashboard.my_home, name='my_home'),

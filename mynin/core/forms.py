@@ -1,10 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordResetForm, \
+    SetPasswordForm
 
 from .models import Invitation, Settings, CustomUser
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm, UserChangeForm, PasswordResetForm, \
-    PasswordChangeForm, SetPasswordForm
 
 
 class SettingsForm(forms.ModelForm):
@@ -83,6 +82,24 @@ class CustomCreateUserForm(UserCreationForm):
 
 
 class CustomUserChangeForm(UserChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomUserChangeForm, self).__init__(*args, **kwargs)
+
+    username = forms.EmailField(widget=forms.EmailInput(
+        attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    first_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Meno'}))
+    last_name = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Priezvisko'}))
+    mobile = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Telefonne cislo'}))
+    address = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Adresa'}))
+    city = forms.CharField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Mesto'}))
+    postal_code = forms.IntegerField(widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'PSC'}))
+
     class Meta:
         model = CustomUser
         fields = [
